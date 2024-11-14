@@ -7,6 +7,8 @@ public enum ExceptionStatus {
 
   /*400 BAD_REQUEST*/
   BAD_REQUEST(400, "Bad Request"),
+  INVALID_EMAIL(400, "Invalid email"),
+  INVALID_PASSWORD(400, "Invalid password"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
