@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: talent-trade
+  profiles:
+    group:
+      local: local-profile
+      prod: prod-profile
+    default: local
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+logging:
+  level:
+    org.springframework: DEBUG
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+server.port: 8080
