@@ -7,6 +7,8 @@ public enum ExceptionStatus {
 
   /*400 BAD_REQUEST*/
   BAD_REQUEST(400, "Bad Request"),
+  INVALID_EMAIL(400, "Invalid email"),
+  INVALID_PASSWORD(400, "Invalid password"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
@@ -22,6 +24,8 @@ public enum ExceptionStatus {
 
   /*404 NOT_FOUND*/
   NOT_FOUND(404, "Not found"),
+  MEMBER_NOT_FOUND(404, "Member not exists"),
+  PROFILE_NOT_FOUND(404, "Profile not exists"),
 
   /*409 CONFLICT*/
   CONFLICT(409, "Conflict");
