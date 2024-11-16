@@ -3,7 +3,6 @@ package site.talent_trade.api.util.response;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -30,7 +29,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
     if (body instanceof ResponseDTO<?> responseDTO) {
       HttpStatus responseStatus = responseDTO.getStatus();
       response.setStatusCode(responseStatus);
-      return new ResponseEntity<ResponseDTO<?>>(responseDTO, responseStatus);
+      return responseDTO;
     }
     return body;
   }
