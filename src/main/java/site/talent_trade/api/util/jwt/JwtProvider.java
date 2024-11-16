@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import site.talent_trade.api.domain.member.Member;
-import site.talent_trade.api.dto.auth.TokenPairDTO;
+import site.talent_trade.api.dto.auth.response.TokenPairDTO;
 import site.talent_trade.api.repository.member.MemberRepository;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
