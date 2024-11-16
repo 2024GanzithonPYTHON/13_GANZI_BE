@@ -1,0 +1,29 @@
+package site.talent_trade.api.service.chat;
+
+import org.springframework.stereotype.Service;
+import site.talent_trade.api.domain.chat.ChatRoom;
+import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.dto.chat.response.ChatRoomResponseDTO;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public interface ChatRoomService {
+
+    //채팅방 생성
+    ChatRoom createChatRoom(Long fromMember, Long toMember);
+
+    //내가 참여한 채팅방 가져오기
+    List<ChatRoomResponseDTO> getChatRoomList(Long memberId);
+
+    //id로 참여 멤버 가져오기
+    Member findMemberById(Long memberId);
+
+    //채팅방 아이디로 채팅방 가져오기
+    ChatRoom findById(Long roomId);
+
+    // 마지막 메시지 업데이트
+    public void updateLastMessage(Long chatRoomId, String lastMessage, LocalDateTime lastMessageAt);
+
+}
