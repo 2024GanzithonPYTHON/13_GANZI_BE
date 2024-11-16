@@ -9,6 +9,8 @@ public enum ExceptionStatus {
   BAD_REQUEST(400, "Bad Request"),
   INVALID_EMAIL(400, "Invalid email"),
   INVALID_PASSWORD(400, "Invalid password"),
+  NICKNAME_TOO_LONG(400, "Nickname too long"),
+  NAME_TOO_LONG(400, "Name too long"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
@@ -28,7 +30,9 @@ public enum ExceptionStatus {
   PROFILE_NOT_FOUND(404, "Profile not exists"),
 
   /*409 CONFLICT*/
-  CONFLICT(409, "Conflict");
+  CONFLICT(409, "Conflict"),
+  DUPLICATED_EMAIL(409, "Duplicated email"),
+  DUPLICATED_NICKNAME(409, "Duplicated nickname");
 
   private final int code;
   private final String msg;
