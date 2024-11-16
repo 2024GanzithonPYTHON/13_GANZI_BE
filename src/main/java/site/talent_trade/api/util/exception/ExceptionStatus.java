@@ -20,6 +20,7 @@ public enum ExceptionStatus {
   TOKEN_NOT_FOUND(401, "Token not found"),
   EXPIRED_TOKEN(401, "Expired token"),
   PREMATURE_TOKEN(401, "Premature token"),
+  WRONG_PASSWORD(401, "Wrong password"),
 
   /*403 FORBIDDEN*/
   FORBIDDEN(403, "Forbidden"),
