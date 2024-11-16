@@ -55,6 +55,9 @@ public class JwtProvider {
       expiration = new Date(now.getTime() + refreshExpiration);
     }
 
+    // 마지막 로그인 시간 업데이트
+    member.updateLastLoginAt();
+
     return Jwts.builder()
         .header().type("JWT").and()
         .id(UUID.randomUUID().toString())
@@ -113,8 +116,9 @@ public class JwtProvider {
   }
 
 
-  /*토큰에서 ID 추출*/
-  public Long getMemberIdFromToken(String token) {
+  /*토큰 유효성 확인 및 유저 ID 추출*/
+  public Long validateToken(HttpServletRequest request) {
+    String token = this.resolveToken(request);
     Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token)
         .getPayload();
     Date now = new Date();
@@ -128,6 +132,11 @@ public class JwtProvider {
     } else if (!claims.get("type").equals(TokenType.ACCESS.name())) {
       throw new CustomException(ExceptionStatus.NOT_ACCESS_TOKEN);
     }
-    return Long.parseLong(claims.getSubject());
+    Long memberId = Long.parseLong(claims.getSubject());
+
+    // 마지막 로그인 시간 업데이트
+    memberRepository.findByMemberId(memberId).updateLastLoginAt();
+
+    return memberId;
   }
 }
