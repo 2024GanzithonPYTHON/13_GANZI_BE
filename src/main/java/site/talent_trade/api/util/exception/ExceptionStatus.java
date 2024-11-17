@@ -32,6 +32,7 @@ public enum ExceptionStatus {
 
   /*409 CONFLICT*/
   CONFLICT(409, "Conflict"),
+  CHAT_ROOM_ALREADY_EXISTS(409,"Chat room already exists" ),
   DUPLICATED_EMAIL(409, "Duplicated email"),
   DUPLICATED_NICKNAME(409, "Duplicated nickname");
 

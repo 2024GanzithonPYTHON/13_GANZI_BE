@@ -49,6 +49,9 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok'
 	testImplementation 'com.h2database:h2'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
