@@ -12,4 +12,4 @@ COPY --from=build /app/build/libs/*.jar app.jar
 VOLUME /tmp
 VOLUME /logs
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod-profile"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
