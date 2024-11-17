@@ -1,7 +1,11 @@
 package site.talent_trade.api.service.chat;
 
 import site.talent_trade.api.domain.chat.Message;
+import site.talent_trade.api.dto.chat.request.MessagePayload;
+import site.talent_trade.api.dto.chat.response.MessageResponseDTO;
+import site.talent_trade.api.util.response.ResponseDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ChatMessageService {
@@ -10,6 +14,9 @@ public interface ChatMessageService {
     void saveMessage(Message message);
 
     // 특정 채팅방의 메시지 목록 조회
-    Optional<Message> getMessagesByChatRoomId(Long roomId);
+    ResponseDTO<List<MessageResponseDTO>> getMessagesByChatRoomId(Long roomId);
 
+
+    //메시지 객체 생성 및 저장
+    MessageResponseDTO createAndSaveMessage(MessagePayload messagePayload);
 }
