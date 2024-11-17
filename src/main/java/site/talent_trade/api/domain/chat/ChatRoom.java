@@ -1,18 +1,19 @@
 package site.talent_trade.api.domain.chat;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.member.Member;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatRoom {
 
     @Id
@@ -55,5 +56,4 @@ public class ChatRoom {
         this.lastMessage = lastMessage;
         this.lastMessageAt = lastMessageAt;
     }
-
 }
