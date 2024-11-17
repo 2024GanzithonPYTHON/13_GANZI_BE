@@ -50,5 +50,6 @@ jobs:
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
             docker stop $(docker ps -a -q) 
             docker rm $(docker ps -a -q)
+            docker pull "${{ secrets.DOCKER_USERNAME }}"/talent-trade:latest
             docker compose up -d
             docker image prune -a -f

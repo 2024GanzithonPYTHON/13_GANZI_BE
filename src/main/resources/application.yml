@@ -1,9 +1,11 @@
 spring:
   application:
     name: talent-trade
-  profiles.include:
-    - local
-    - prod
+  profiles:
+    group:
+      local: local-profile
+      prod: prod-profile
+    default: local
 
   jpa:
     hibernate:
