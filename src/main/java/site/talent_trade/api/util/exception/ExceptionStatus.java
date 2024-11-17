@@ -28,7 +28,10 @@ public enum ExceptionStatus {
   PROFILE_NOT_FOUND(404, "Profile not exists"),
 
   /*409 CONFLICT*/
-  CONFLICT(409, "Conflict");
+  CONFLICT(409, "Conflict"),
+  CHAT_ROOM_ALREADY_EXISTS(409,"Chat room already exists" );
+
+
 
   private final int code;
   private final String msg;
