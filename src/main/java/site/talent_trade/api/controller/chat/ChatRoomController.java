@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.dto.chat.response.ChatRoomResponseDTO;
 import site.talent_trade.api.service.chat.ChatRoomService;
+import site.talent_trade.api.util.response.ResponseDTO;
 
 import java.util.List;
 
@@ -23,13 +24,13 @@ public class ChatRoomController {
 
     //채팅방 생성
     @PostMapping("/createChatRoom")
-    public ChatRoom createChatRoom(Long fromMemberId, Long toMemberId) {
+    public ResponseDTO<ChatRoomResponseDTO> createChatRoom(@RequestParam Long fromMemberId,@RequestParam Long toMemberId) {
         return chatRoomService.createChatRoom(fromMemberId, toMemberId);
     }
 
     // 내가 참여한 채팅방 조회
     @GetMapping("/getChatRoomList")
-    public List<ChatRoomResponseDTO> getMyChatRooms(@RequestParam Long memberId) {
+    public ResponseDTO<List<ChatRoomResponseDTO>> getMyChatRooms(@RequestParam Long memberId) {
         return chatRoomService.getChatRoomList(memberId);
     }
 
