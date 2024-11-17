@@ -42,12 +42,6 @@ jobs:
       # Deploy
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.6
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         with:
           host: ${{ secrets.HOST_DOMAIN }}
           username: ${{ secrets.HOST_USERNAME }}
@@ -56,5 +50,10 @@ jobs:
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
             docker stop $(docker ps -a -q) 
             docker rm $(docker ps -a -q)
+            export DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
+            export MYSQL_DATABASE="${{ secrets.MYSQL_DATABASE }}"
+            export MYSQL_USER="${{ secrets.MYSQL_USER }}"
+            export MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}"
+            export MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}"
             docker compose up -d
             docker image prune -a -f
