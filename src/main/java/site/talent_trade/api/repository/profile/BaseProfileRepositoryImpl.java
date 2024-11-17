@@ -1,8 +1,8 @@
 package site.talent_trade.api.repository.profile;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import site.talent_trade.api.domain.profile.Profile;
 import site.talent_trade.api.util.exception.CustomException;
@@ -16,29 +16,38 @@ public class BaseProfileRepositoryImpl implements BaseProfileRepository {
 
   @Override
   public Profile findByProfileId(Long profileId) {
-    return Optional.ofNullable(em.createQuery("select p from Profile p"
-            + " where p.id =:profileId", Profile.class)
-        .setParameter("profileId", profileId)
-        .getSingleResult())
-        .orElseThrow(() -> new CustomException(ExceptionStatus.PROFILE_NOT_FOUND));
+    try {
+      return em.createQuery("select p from Profile p"
+              + " where p.id =:profileId", Profile.class)
+          .setParameter("profileId", profileId)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      throw new CustomException(ExceptionStatus.PROFILE_NOT_FOUND);
+    }
   }
 
   @Override
   public Profile findByMemberId(Long memberId) {
-    return Optional.ofNullable(em.createQuery("select p from Profile p"
-            + " where p.member.id =:memberId", Profile.class)
-        .setParameter("memberId", memberId)
-        .getSingleResult())
-        .orElseThrow(() -> new CustomException(ExceptionStatus.PROFILE_NOT_FOUND));
+    try {
+      return em.createQuery("select p from Profile p"
+              + " where p.member.id =:memberId", Profile.class)
+          .setParameter("memberId", memberId)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      throw new CustomException(ExceptionStatus.PROFILE_NOT_FOUND);
+    }
   }
 
   @Override
   public Profile findProfileWithMemberById(Long profileId) {
-    return Optional.ofNullable(em.createQuery("select p from Profile p"
-            + " left join fetch p.member"
-            + " where p.id =:profileId", Profile.class)
-        .setParameter("profileId", profileId)
-        .getSingleResult())
-        .orElseThrow(() -> new CustomException(ExceptionStatus.PROFILE_NOT_FOUND));
+    try {
+      return em.createQuery("select p from Profile p"
+              + " left join fetch p.member"
+              + " where p.id =:profileId", Profile.class)
+          .setParameter("profileId", profileId)
+          .getSingleResult();
+    } catch (NoResultException e) {
+      throw new CustomException(ExceptionStatus.PROFILE_NOT_FOUND);
+    }
   }
 }
