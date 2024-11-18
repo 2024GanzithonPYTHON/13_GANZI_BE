@@ -116,6 +116,14 @@ public class JwtProvider {
   }
 
 
+  /*문자열 토큰을 통해 유저 ID 추출*/
+  public Long getMemberIdFromToken(String token) {
+    Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token)
+        .getPayload();
+    return Long.parseLong(claims.getSubject());
+  }
+
+
   /*토큰 유효성 확인 및 유저 ID 추출*/
   public Long validateToken(HttpServletRequest request) {
     String token = this.resolveToken(request);
