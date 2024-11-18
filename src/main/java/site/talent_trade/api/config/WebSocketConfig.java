@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     //todo
     //jwt 검증 interceptor
-    //private final FilterChannelInterceptor filterChannelInterceptor;
+    private final FilterChannelInterceptor filterChannelInterceptor;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry){
@@ -34,10 +34,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     //todo
     //추후 jwt 검증
-//    @Override
-//    public void configureClientInboundChannel(ChannelRegistration registration) {
-//        registration.interceptors(filterChannelInterceptor);
-//    }
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(filterChannelInterceptor);
+    }
 
 
 }
