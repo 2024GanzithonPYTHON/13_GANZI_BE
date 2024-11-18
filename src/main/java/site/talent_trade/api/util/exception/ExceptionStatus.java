@@ -11,6 +11,7 @@ public enum ExceptionStatus {
   INVALID_PASSWORD(400, "Invalid password"),
   NICKNAME_TOO_LONG(400, "Nickname too long"),
   NAME_TOO_LONG(400, "Name too long"),
+  FILE_IS_EMPTY(400, "File is empty"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
