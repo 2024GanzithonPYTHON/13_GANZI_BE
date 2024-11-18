@@ -62,9 +62,25 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
 
     // Authorization 헤더에서 대괄호([])를 제거하는 메서드
     public String removeBrackets(String token) {
+        // Trim and log the token before processing
+        token = token.trim();
+        log.info("Token before processing: {}", token);  // 디버깅 로그 추가
+
+
         if (token.startsWith("[") && token.endsWith("]")) {
-            return token.substring(1, token.length() - 1);
+            token = token.substring(1, token.length() - 1);
+            log.info("Token after removing brackets: {}", token);  // 대괄호 제거 후 토큰 로그
         }
+
+        // Remove "Bearer " prefix if it exists
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " (7 characters) 제거
+            log.info("Token after removing Bearer: {}", token);  // Bearer 제거 후 토큰 로그
+        }
+
         return token;
     }
+
+
+
 }
