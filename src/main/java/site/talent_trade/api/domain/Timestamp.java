@@ -22,4 +22,14 @@ public class Timestamp {
   private LocalDateTime createdAt;
   @LastModifiedDate
   private LocalDateTime modifiedAt;
+
+  public Timestamp(LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    this.createdAt = createdAt;
+    this.modifiedAt = modifiedAt;
+  }
+
+  public static Timestamp create() {
+    LocalDateTime now = LocalDateTime.now();
+    return new Timestamp(now, now);
+  }
 }
