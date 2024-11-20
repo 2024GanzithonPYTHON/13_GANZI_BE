@@ -2,6 +2,7 @@ package site.talent_trade.api.controller.community;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import site.talent_trade.api.domain.community.SortBy;
@@ -18,7 +19,8 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/api/post")
+@Slf4j
 public class PostController {
 
     @Autowired
@@ -33,8 +35,8 @@ public class PostController {
     public ResponseDTO<List<PostResponseDTO>> getPostList(@RequestParam(value = "talent", required = false) String talent,
                                                           @RequestParam(value = "keyword", required = false) String keyword,
                                                           @RequestParam(value = "sortBy", defaultValue = "LATEST") SortBy sortBy) {
-        System.out.println("talent: " + talent); // talet 값 확인
-        System.out.println("sortBy: " + sortBy); // sortBy 값 확인
+        log.info("talent: "+talent);
+        log.info("sortBy: "+sortBy);
         // 게시글 검색 및 필터링
         return postService.getPostList(talent, keyword, sortBy);
     }
@@ -52,7 +54,7 @@ public class PostController {
     }
 
     // 게시글 상세 조회 (댓글 포함)
-    @GetMapping("/getPostDetail/{postId}")
+    @GetMapping("/detail/{postId}")
     public ResponseDTO<PostDetailDTO> getPostDetail(HttpServletRequest request, @PathVariable Long postId) {
 
         jwtProvider.validateToken(request);
@@ -61,7 +63,7 @@ public class PostController {
     }
 
     //마이페이지 -> 내가 쓴 게시물 가져오기(댓글 개수, 제목, 날짜)
-    @GetMapping("/getMyPosts")
+    @GetMapping("/mine")
     public ResponseDTO<List<PostResponseDTO>> getMyPostList(HttpServletRequest request) {
         // JWT 토큰을 통해 사용자 인증
         Long memberId = jwtProvider.validateToken(request);
