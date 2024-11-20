@@ -27,5 +27,7 @@ public interface ChatRoomService {
     // 마지막 메시지 업데이트
     public void updateLastMessage(Long chatRoomId, String lastMessage, LocalDateTime lastMessageAt);
 
+    //성사됐는지 안됐는지 판단
+
 
 }

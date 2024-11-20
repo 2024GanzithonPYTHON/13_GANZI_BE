@@ -42,8 +42,20 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         Member fromMember = memberRepository.findById(fromMemberId).orElseThrow(() -> new IllegalArgumentException("From member not found"));
         Member toMember = memberRepository.findById(toMemberId).orElseThrow(() -> new IllegalArgumentException("To member not found"));
 
+        // 메시지 제한 확인 및 업데이트
+        fromMember.updateMessageLimit(); // 메시지 제한을 날짜 기준으로 갱신
+
+        // 메시지 제한이 3개 초과일 경우 예외 처리
+        if (fromMember.getMessageLimit() > 3) {
+            throw new CustomException(ExceptionStatus.MESSAGE_LIMIT_EXCEEDED); // 커스텀 예외
+        }
+
         // 채팅방 만들기
         ChatRoom chatRoom = new ChatRoom(fromMember, toMember);
+
+        // 메시지 횟수 증가
+        fromMember.incrementMessageLimit();
+
         chatRoomRepository.save(chatRoom);
 
         // DTO로 변환 후 반환
