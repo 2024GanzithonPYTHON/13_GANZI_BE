@@ -7,7 +7,7 @@ import site.talent_trade.api.domain.chat.ChatRoom;
 
 import java.util.List;
 
-public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long>, BaseChatRoomRepository {
 
     // 두 멤버 간 채팅방이 이미 존재하는지 확인
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM ChatRoom c " +

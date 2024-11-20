@@ -5,12 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.domain.member.Member;
 import site.talent_trade.api.domain.review.Review;
 import site.talent_trade.api.dto.review.request.ReviewRequestDTO;
 import site.talent_trade.api.dto.review.response.ReviewResponseDTO;
+import site.talent_trade.api.repository.chat.ChatRoomRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
 import site.talent_trade.api.repository.review.ReviewRepository;
+import site.talent_trade.api.util.exception.CustomException;
+import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
 
 @Service
@@ -20,10 +24,21 @@ public class ReviewServiceImpl implements ReviewService {
 
   private final ReviewRepository reviewRepository;
   private final MemberRepository memberRepository;
+  private final ChatRoomRepository chatRoomRepository;
 
   @Override
+  @Transactional
   public ResponseDTO<Void> writeReview(Long fromMemberId, Long toMemberId,
       ReviewRequestDTO request) {
+    if (fromMemberId.equals(toMemberId)) {
+      throw new CustomException(ExceptionStatus.CAN_NOT_WRITE_REIVEW_TO_MYSELF);
+    }
+
+    ChatRoom chatRoom = chatRoomRepository.findChatRoomByTwoMemberIds(fromMemberId, toMemberId);
+    if (!chatRoom.isCompleted()) {
+      throw new CustomException(ExceptionStatus.TRADE_NOT_COMPLETED);
+    }
+
     // 유저 조회
     Member fromMember = memberRepository.findByMemberId(fromMemberId);
     Member toMember = memberRepository.findMemberWithProfileById(toMemberId);
