@@ -19,6 +19,8 @@ public enum ExceptionStatus {
   MESSAGE_LIMIT_EXCEEDED(400,"Message Limit exceeded"),
 
   IMAGE_LIMIT_EXCEEDED(400, "Image limit exceeded"),
+  CAN_NOT_WRITE_REIVEW_TO_MYSELF(400, "Can not write review to myself"),
+  TRADE_NOT_COMPLETED(400, "Trade not completed"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
