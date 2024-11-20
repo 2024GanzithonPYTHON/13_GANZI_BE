@@ -18,6 +18,7 @@ public class BaseProfileRepositoryImpl implements BaseProfileRepository {
   public Profile findByProfileId(Long profileId) {
     try {
       return em.createQuery("select p from Profile p"
+              + " left join fetch p.images i"
               + " where p.id =:profileId", Profile.class)
           .setParameter("profileId", profileId)
           .getSingleResult();
@@ -30,6 +31,7 @@ public class BaseProfileRepositoryImpl implements BaseProfileRepository {
   public Profile findByMemberId(Long memberId) {
     try {
       return em.createQuery("select p from Profile p"
+              + " left join fetch p.images i"
               + " where p.member.id =:memberId", Profile.class)
           .setParameter("memberId", memberId)
           .getSingleResult();
@@ -42,6 +44,7 @@ public class BaseProfileRepositoryImpl implements BaseProfileRepository {
   public Profile findProfileWithMemberById(Long profileId) {
     try {
       return em.createQuery("select p from Profile p"
+              + " left join fetch p.images i"
               + " left join fetch p.member"
               + " where p.id =:profileId", Profile.class)
           .setParameter("profileId", profileId)

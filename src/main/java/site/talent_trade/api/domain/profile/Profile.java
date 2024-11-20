@@ -5,15 +5,20 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import site.talent_trade.api.domain.Timestamp;
+import site.talent_trade.api.domain.image.Image;
 import site.talent_trade.api.domain.member.Gender;
 import site.talent_trade.api.domain.member.Member;
 
@@ -26,6 +31,10 @@ public class Profile {
 
   @OneToOne(mappedBy = "profile")
   private Member member;
+
+  @OneToMany(mappedBy = "profile", orphanRemoval = true,
+      fetch = FetchType.LAZY)
+  private List<Image> images = new ArrayList<>();
 
   @Lob @Size(max = 500)
   @Column(columnDefinition = "TEXT", length = 500)

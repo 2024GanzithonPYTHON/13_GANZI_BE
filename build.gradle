@@ -28,30 +28,45 @@ ext {
 }
 
 dependencies {
+	// Spring Boot
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// 추후 S3 기능 추가 시 주석 해제
-//	implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.2.0-M1'
-//	implementation 'io.awspring.cloud:spring-cloud-aws-s3:3.2.0-M1'
-	implementation "io.jsonwebtoken:jjwt-api:${JJWT_VERSION}"
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	testImplementation 'org.springframework.security:spring-security-test'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Test
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Logging
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// DB
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	testImplementation 'com.h2database:h2'
+
+	// JJWT
+	implementation "io.jsonwebtoken:jjwt-api:${JJWT_VERSION}"
 	runtimeOnly "io.jsonwebtoken:jjwt-gson:${JJWT_VERSION}"
 	runtimeOnly "io.jsonwebtoken:jjwt-impl:${JJWT_VERSION}"
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.projectlombok:lombok'
-	testImplementation 'com.h2database:h2'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// AWS S3
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.2.0-M1'
+	implementation 'io.awspring.cloud:spring-cloud-aws-s3:3.2.0-M1'
 
 	//WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//  Thumbnailator
+	implementation 'net.coobird:thumbnailator:0.4.8'
 }
 
 tasks.named('test') {
