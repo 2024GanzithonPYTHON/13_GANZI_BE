@@ -155,13 +155,13 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ExceptionStatus.POST_NOT_FOUND));
 
         // 조회수 증가: 새로운 Post 객체 생성
-        Post updatedPost = post.incrementHitCount();
+        post.incrementHitCount();
         // 댓글 리스트가 null일 경우 빈 리스트로 처리하여 사이즈를 안전하게 호출
-        int commentCount = (updatedPost.getComments() != null) ? updatedPost.getComments().size() : 0;
+        int commentCount = (post.getComments() != null) ? post.getComments().size() : 0;
 
 
         // 변경된 Post 저장
-        postRepository.save(updatedPost);
+        postRepository.save(post);
 
         // 댓글 목록 가져오기
         List<CommentResponseDTO> commentResponseDTOs = post.getComments().stream()
@@ -178,16 +178,16 @@ public class PostServiceImpl implements PostService {
 
         // PostResponseDTO 객체 생성
         PostResponseDTO postResponseDTO = PostResponseDTO.builder()
-                .postId(updatedPost.getId())
-                .nickname(updatedPost.getMember().getNickname())
-                .title(updatedPost.getTitle())
-                .content(updatedPost.getContent())
-                .talent(updatedPost.getMember().getMyTalent().name())
-                .talentDetail(updatedPost.getMember().getMyTalentDetail())
-                .createdAt(updatedPost.getTimestamp().getCreatedAt())
-                .hitCount(updatedPost.getHitCount())
+                .postId(post.getId())
+                .nickname(post.getMember().getNickname())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .talent(post.getMember().getMyTalent().name())
+                .talentDetail(post.getMember().getMyTalentDetail())
+                .createdAt(post.getTimestamp().getCreatedAt())
+                .hitCount(post.getHitCount())
                 .commentCount(commentCount) // 댓글 개수 추가
-                .gender(updatedPost.getMember().getGender().name())
+                .gender(post.getMember().getGender().name())
                 .build();
         // PostDetailDTO 객체 생성
         PostDetailDTO postDetailDTO = PostDetailDTO.builder()
