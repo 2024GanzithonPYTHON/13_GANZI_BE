@@ -23,11 +23,9 @@ public class ChatRoomController {
     //내가 참여한 채팅방 리스트 조회
     //반환해야하는 값 : 상대방의 닉네임, 분야, 세부분야, 마지막 메시지, 마지막 메시지를 보낸 시간
 
-    @Autowired
-    private ChatRoomService chatRoomService;
+    private final ChatRoomService chatRoomService;
 
-    @Autowired
-    private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
     //채팅방 생성
     @PostMapping("/create")

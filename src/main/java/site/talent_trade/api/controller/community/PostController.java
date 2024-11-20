@@ -23,11 +23,9 @@ import java.util.List;
 @Slf4j
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
-    @Autowired
-    private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
 
     // 게시글 리스트 조회 (jwt 인증 필요 없음)

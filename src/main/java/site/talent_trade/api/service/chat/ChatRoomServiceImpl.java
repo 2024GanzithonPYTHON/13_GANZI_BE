@@ -67,7 +67,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .opponentNickname(toMember.getNickname())
                 .talent(toMember.getMyTalent())
                 .detailTalent(toMember.getMyTalentDetail())
-                .is_completed(chatRoom.isCompleted())
+                .completed(chatRoom.isCompleted())
                 .build();
 
         // ResponseDTO 래핑하여 반환
@@ -90,7 +90,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                             .detailTalent(opponent.getMyTalentDetail())   // 상대방의 세부 재능
                             .lastMessage(chatRoom.getLastMessage())     // 마지막 메시지
                             .lastMessageAt(chatRoom.getLastMessageAt()) // 마지막 메시지 시간
-                            .is_completed(chatRoom.isCompleted())
+                            .completed(chatRoom.isCompleted())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -122,7 +122,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .opponentNickname(chatRoom.getFromMember().getNickname())  // 예시로 'fromMember' 사용
                 .talent(chatRoom.getFromMember().getMyTalent())
                 .detailTalent(chatRoom.getFromMember().getMyTalentDetail())
-                .is_completed(chatRoom.isCompleted())
+                .completed(chatRoom.isCompleted())
                 .build();
 
         return new ResponseDTO<>(chatRoomResponseDTO, HttpStatus.OK);

@@ -16,16 +16,16 @@ public class ChatRoomResponseDTO {
     private String detailTalent; //세부재능
     private String lastMessage; //마지막 메시지
     private LocalDateTime lastMessageAt; //마지막 메시지를 받은 시간
-    private boolean is_completed; //성사됐는지 안됐는지
+    private boolean completed; //성사됐는지 안됐는지
 
-    public ChatRoomResponseDTO(Long roomId, String opponentNickname, Talent talent, String detailTalent, String lastMessage, LocalDateTime lastMessageAt, boolean is_completed) {
+    public ChatRoomResponseDTO(Long roomId, String opponentNickname, Talent talent, String detailTalent, String lastMessage, LocalDateTime lastMessageAt, boolean completed) {
         this.roomId = roomId;
         this.opponentNickname = opponentNickname;
         this.talent = talent;
         this.detailTalent = detailTalent;
         this.lastMessage = lastMessage;
         this.lastMessageAt = lastMessageAt;
-        this.is_completed = is_completed;
+        this.completed = completed;
     }
 
 
