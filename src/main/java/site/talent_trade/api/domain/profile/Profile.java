@@ -17,12 +17,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.image.Image;
 import site.talent_trade.api.domain.member.Gender;
 import site.talent_trade.api.domain.member.Member;
 
 @Entity @Getter
+@NoArgsConstructor
 public class Profile {
 
   @Id @Column(name = "profile_id")
@@ -51,6 +53,7 @@ public class Profile {
 
   private int tradeCnt;
   private int reviewCnt;
+  @Column(precision = 2, scale = 1)
   private BigDecimal scoreAvg;
   private int scoreAccum;
 
@@ -64,7 +67,8 @@ public class Profile {
   private Timestamp timestamp;
 
   /* 생성자 */
-  public Profile() {
+  public Profile(Member member) {
+    this.member = member;
     this.tradeCnt = 0;
     this.reviewCnt = 0;
     this.scoreAvg = BigDecimal.ZERO;
@@ -82,6 +86,4 @@ public class Profile {
     if (meetingType != null) this.meetingType = meetingType;
     if (preferGender != null) this.preferGender = preferGender;
   }
-
-  // Todo: 리뷰, 이미지 관련 기능 추가
 }

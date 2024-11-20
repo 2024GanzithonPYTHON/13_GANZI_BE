@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import site.talent_trade.api.domain.member.Gender;
@@ -24,9 +23,6 @@ public class MemberRepositoryTest {
 
   @Mock
   private MemberRepository memberRepository;
-
-  @InjectMocks
-  private MemberRepositoryTest memberRepositoryTest;
 
   private Member existingMember;
 

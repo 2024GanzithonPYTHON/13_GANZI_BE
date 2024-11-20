@@ -45,4 +45,8 @@ public class Image {
     this.timestamp = new Timestamp();
   }
 
+  /*이미지 삭제*/
+  public void deleteImage() {
+    this.profile.getImages().remove(this);
+  }
 }
