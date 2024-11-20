@@ -106,4 +106,20 @@ public class Member {
   }
 
   // Todo: 메시지 횟수 수정 기능 추가
+  public void updateMessageLimit() {
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime todayAt8AM = LocalDate.now().atTime(8, 0); // 오늘 오전 8시
+    LocalDateTime lastResetTime = lastLoginAt != null ? lastLoginAt : todayAt8AM.minusDays(1);
+
+    // 만약 현재 시간이 오늘 오전 8시 이후이고, 마지막 리셋 시간이 어제 8시 이전이라면 리셋
+    if (now.isAfter(todayAt8AM) && lastResetTime.isBefore(todayAt8AM)) {
+      this.messageLimit = 0; // 메시지 제한 초기화
+      this.lastLoginAt = now; // 마지막 활동 시간 갱신
+    }
+  }
+
+  public void incrementMessageLimit() {
+    this.messageLimit++;
+  }
+
 }

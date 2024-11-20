@@ -16,6 +16,8 @@ public enum ExceptionStatus {
   EXPERIENCE_INTRO_TOO_LONG(400, "Experience intro too long"),
   REGION_TOO_LONG(400, "Region too long"),
   FILE_IS_EMPTY(400, "File is empty"),
+  MESSAGE_LIMIT_EXCEEDED(400,"Message Limit exceeded"),
+
   IMAGE_LIMIT_EXCEEDED(400, "Image limit exceeded"),
   CAN_NOT_WRITE_REIVEW_TO_MYSELF(400, "Can not write review to myself"),
   TRADE_NOT_COMPLETED(400, "Trade not completed"),
@@ -39,7 +41,7 @@ public enum ExceptionStatus {
   PROFILE_NOT_FOUND(404, "Profile not exists"),
   IMAGE_NOT_FOUND(404, "Image not exists"),
   POST_NOT_FOUND(404,"Post not exists" ),
-  CHAT_ROOM_NOT_FOUND(404, "Chat room not exists"),
+  CHAT_ROOM_NOT_FOUND(404,"ChatRoom not exists"),
 
   /*409 CONFLICT*/
   CONFLICT(409, "Conflict"),

@@ -17,11 +17,10 @@ import site.talent_trade.api.util.response.ResponseDTO;
 @RequiredArgsConstructor
 @RequestMapping("/api/comments")
 public class CommentController {
-    @Autowired
-    private CommentService commentService;
 
-    @Autowired
-    private JwtProvider jwtProvider;
+    private final CommentService commentService;
+
+    private final JwtProvider jwtProvider;
 
     //댓글 작성
     @PostMapping

@@ -19,19 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@RequestMapping("/chatrooms")
 public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
 
 
     // 특정 채팅방의 메시지 목록 조회
-    @GetMapping("chat/room/{roomId}/messages")
+    @GetMapping("/{roomId}/messages")
     public ResponseDTO<List<MessageResponseDTO>> getMessagesByRoomId(@PathVariable Long roomId) {
         return chatMessageService.getMessagesByChatRoomId(roomId);
     }
 
-    @MessageMapping("/send/message")
-    @SendTo("/topic/chat")
+    @MessageMapping("/chatrooms/{roomId}/send")
+    @SendTo("/topic/chatrooms/{roomId}")
     @Transactional
     public ResponseDTO<MessageResponseDTO> sendMessage(@RequestBody MessagePayload messagePayload) {
         MessageResponseDTO messageResponseDTO = chatMessageService.createAndSaveMessage(messagePayload);
