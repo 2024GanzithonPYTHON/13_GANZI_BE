@@ -30,14 +30,14 @@ public class ChatRoomController {
     private JwtProvider jwtProvider;
 
     //채팅방 생성
-    @PostMapping
+    @PostMapping("/create")
     public ResponseDTO<ChatRoomResponseDTO> createChatRoom(HttpServletRequest request, @RequestParam Long toMemberId) {
         Long fromMemberId = jwtProvider.validateToken(request);
         return chatRoomService.createChatRoom(fromMemberId, toMemberId);
     }
 
     // 내가 참여한 채팅방 조회
-    @GetMapping
+    @GetMapping("/get")
     public ResponseDTO<List<ChatRoomResponseDTO>> getMyChatRooms(HttpServletRequest request) {
         Long memberId = jwtProvider.validateToken(request);
         return chatRoomService.getChatRoomList(memberId);
