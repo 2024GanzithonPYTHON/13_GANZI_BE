@@ -95,4 +95,18 @@ public class Member {
   }
 
   // Todo: 메시지 횟수 수정 기능 추가
+  public void updateMessageLimit() {
+    LocalDateTime now = LocalDateTime.now();
+
+    // 마지막 로그인 시간과 현재 시간이 다른 날짜일 경우 메시지 제한을 리셋
+    if (lastLoginAt.toLocalDate().isBefore(now.toLocalDate())) {
+      this.messageLimit = 0; // 새 날 시작 시 메시지 제한 초기화
+      this.lastLoginAt = now;
+    }
+  }
+
+  public void incrementMessageLimit() {
+    this.messageLimit++;
+  }
+
 }
