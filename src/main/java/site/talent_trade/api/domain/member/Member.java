@@ -11,15 +11,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.profile.Profile;
+import site.talent_trade.api.domain.review.Review;
 
 @Entity @Getter
 @NoArgsConstructor
@@ -32,6 +36,11 @@ public class Member {
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "profile_id")
   private Profile profile;
+
+  // 작성받은 리뷰
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromMember")
+  private List<Review> myReviews = new ArrayList<>();
+
 
   private String email;
   private String password;
