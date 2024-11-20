@@ -39,25 +39,33 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
         // CONNECT 또는 SEND 명령에 대해서만 처리
         if (Objects.equals(headerAccessor.getCommand(), StompCommand.CONNECT)
                 || Objects.equals(headerAccessor.getCommand(), StompCommand.SEND)) {
-
+            // Authorization 헤더가 있는지 확인
+            String token = headerAccessor.getNativeHeader("Authorization") != null
+                    ? removeBrackets(headerAccessor.getNativeHeader("Authorization").get(0))
+                    : null;
             // Authorization 헤더에서 토큰 추출
-            String token = removeBrackets(String.valueOf(headerAccessor.getNativeHeader("Authorization")));
+            //String token = removeBrackets(String.valueOf(headerAccessor.getNativeHeader("Authorization")));
             log.info(">>>>>> Token received : {}", token);
-            try {
-                // 토큰을 사용하여 사용자 ID 추출
-                Long memberId = jwtProvider.getMemberIdFromToken(token);
+            if (token != null) {
+                try {
+                    // 토큰을 사용하여 사용자 ID 추출
+                    Long memberId = jwtProvider.getMemberIdFromToken(token);
 
-                // WebSocket 헤더에 AccountId를 추가하여, 후속 메시지에서 사용할 수 있도록 함
-                headerAccessor.addNativeHeader("AccountId", String.valueOf(memberId));
-                log.info(">>>>>> AccountId added to header : {}", memberId);
+                    // WebSocket 헤더에 AccountId를 추가하여, 후속 메시지에서 사용할 수 있도록 함
+                    headerAccessor.addNativeHeader("AccountId", String.valueOf(memberId));
+                    log.info(">>>>>> AccountId added to header : {}", memberId);
 
-            } catch (Exception e) {
-                log.warn(">>>>> Authentication Failed in FilterChannelInterceptor : ", e);
-                // 인증 실패 시 예외 처리 (예: 401 Unauthorized 응답 처리)
-                throw new CustomException(ExceptionStatus.INVALID_TOKEN);
+                } catch (Exception e) {
+                    log.warn(">>>>> Authentication Failed in FilterChannelInterceptor : ", e);
+                    // 인증 실패 시 예외 처리 (예: 401 Unauthorized 응답 처리)
+                    throw new CustomException(ExceptionStatus.INVALID_TOKEN);
+                }
+            } else {
+            log.warn(">>>>>> Authorization header is missing");
             }
         }
-        return message;
+            return message;
+
     }
 
     // Authorization 헤더에서 대괄호([])를 제거하는 메서드
