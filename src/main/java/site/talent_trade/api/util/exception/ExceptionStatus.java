@@ -11,6 +11,7 @@ public enum ExceptionStatus {
   INVALID_PASSWORD(400, "Invalid password"),
   NICKNAME_TOO_LONG(400, "Nickname too long"),
   NAME_TOO_LONG(400, "Name too long"),
+  FILE_IS_EMPTY(400, "File is empty"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
@@ -29,6 +30,7 @@ public enum ExceptionStatus {
   NOT_FOUND(404, "Not found"),
   MEMBER_NOT_FOUND(404, "Member not exists"),
   PROFILE_NOT_FOUND(404, "Profile not exists"),
+  IMAGE_NOT_FOUND(404, "Image not exists"),
   POST_NOT_FOUND(404,"Post not exists" ),
 
   /*409 CONFLICT*/
