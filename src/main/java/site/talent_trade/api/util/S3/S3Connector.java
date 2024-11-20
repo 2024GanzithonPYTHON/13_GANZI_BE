@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import software.amazon.awssdk.services.s3.S3Client;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class S3Connector {
@@ -28,37 +30,41 @@ public class S3Connector {
 
 
   /*이미지 업로드*/
-  public ImageUrlPairDTO uploadImage(MultipartFile image) throws IOException {
+  public ImageUrlPairDTO uploadImage(MultipartFile image) {
     if (image.isEmpty()) {
       throw new CustomException(ExceptionStatus.FILE_IS_EMPTY);
     }
 
-    String imageName = generateImageName();
+    try {
+      String imageName = generateImageName();
 
-    File originalImage;
+      File originalImage;
 
-    // 썸네일 생성
-    String thumbnailImageName = imageName + "_thumbnail";
-    File resizedImage = resizeImage(image, thumbnailImageName, true);
+      // 썸네일 생성
+      String thumbnailImageName = imageName + "_thumbnail";
+      File resizedImage = resizeImage(image, thumbnailImageName, true);
 
-    // 이미지가 3MB를 초과하면 리사이징
-    if (image.getSize() > MAX_FILE_SIZE) {
-      originalImage = resizeImage(image, imageName, false);
-    } else {
-      originalImage = File.createTempFile(imageName, SUFFIX);
-      image.transferTo(originalImage);
+      // 이미지가 3MB를 초과하면 리사이징
+      if (image.getSize() > MAX_FILE_SIZE) {
+        originalImage = resizeImage(image, imageName, false);
+      } else {
+        originalImage = File.createTempFile(imageName, SUFFIX);
+        image.transferTo(originalImage);
+      }
+
+      String originalImagePath =  "images/originals/" + imageName + SUFFIX;
+      String thumbnailImagePath = "images/thumbnails/" + thumbnailImageName + SUFFIX;
+
+      s3Client.putObject(builder -> builder.bucket(bucket).key(originalImagePath), originalImage.toPath());
+      s3Client.putObject(builder -> builder.bucket(bucket).key(thumbnailImagePath), resizedImage.toPath());
+
+      String originalImageUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucket).key(originalImagePath)).toString();
+      String thumbnailImageUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucket).key(thumbnailImagePath)).toString();
+
+      return new ImageUrlPairDTO(originalImageUrl, thumbnailImageUrl);
+    } catch (IOException e) {
+      throw new CustomException(ExceptionStatus.FILE_UPLOAD_FAILED);
     }
-
-    String originalImagePath =  "images/originals/" + imageName + SUFFIX;
-    String thumbnailImagePath = "images/thumbnails/" + thumbnailImageName + SUFFIX;
-
-    s3Client.putObject(builder -> builder.bucket(bucket).key(originalImagePath), originalImage.toPath());
-    s3Client.putObject(builder -> builder.bucket(bucket).key(thumbnailImagePath), resizedImage.toPath());
-
-    String originalImageUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucket).key(originalImagePath)).toString();
-    String thumbnailImageUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucket).key(thumbnailImagePath)).toString();
-
-    return new ImageUrlPairDTO(originalImageUrl, thumbnailImageUrl);
   }
 
 

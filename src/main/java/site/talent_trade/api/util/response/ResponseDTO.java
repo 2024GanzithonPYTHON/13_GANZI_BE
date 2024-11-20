@@ -1,6 +1,7 @@
 package site.talent_trade.api.util.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
  * @param <T>
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDTO<T> {
 
   @JsonIgnore

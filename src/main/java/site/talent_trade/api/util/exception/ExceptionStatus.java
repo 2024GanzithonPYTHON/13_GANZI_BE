@@ -11,7 +11,12 @@ public enum ExceptionStatus {
   INVALID_PASSWORD(400, "Invalid password"),
   NICKNAME_TOO_LONG(400, "Nickname too long"),
   NAME_TOO_LONG(400, "Name too long"),
+  MY_COMMENT_TOO_LONG(400, "My comment too long"),
+  MY_TALENT_INTRO_TOO_LONG(400, "My talent intro too long"),
+  EXPERIENCE_INTRO_TOO_LONG(400, "Experience intro too long"),
+  REGION_TOO_LONG(400, "Region too long"),
   FILE_IS_EMPTY(400, "File is empty"),
+  IMAGE_LIMIT_EXCEEDED(400, "Image limit exceeded"),
 
   /*401 UNAUTHORIZED*/
   UNAUTHORIZED(401, "Unauthorized"),
@@ -36,7 +41,10 @@ public enum ExceptionStatus {
   CONFLICT(409, "Conflict"),
   CHAT_ROOM_ALREADY_EXISTS(409,"Chat room already exists" ),
   DUPLICATED_EMAIL(409, "Duplicated email"),
-  DUPLICATED_NICKNAME(409, "Duplicated nickname");
+  DUPLICATED_NICKNAME(409, "Duplicated nickname"),
+
+  /*500 INTERNAL_SERVER_ERROR*/
+  FILE_UPLOAD_FAILED(500, "File upload failed");
 
   private final int code;
   private final String msg;
