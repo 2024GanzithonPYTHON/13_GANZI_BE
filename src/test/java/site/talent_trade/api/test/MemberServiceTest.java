@@ -18,8 +18,10 @@ import site.talent_trade.api.dto.auth.request.RefreshTokenDTO;
 import site.talent_trade.api.dto.auth.response.TokenPairDTO;
 import site.talent_trade.api.dto.member.request.SigninDTO;
 import site.talent_trade.api.dto.member.request.SignupDTO;
+import site.talent_trade.api.dto.member.response.DuplicationCheckDTO;
 import site.talent_trade.api.repository.member.MemberRepository;
 import site.talent_trade.api.service.member.MemberServiceImpl;
+import site.talent_trade.api.util.Validator;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.jwt.JwtProvider;
@@ -36,6 +38,8 @@ public class MemberServiceTest {
   private PasswordEncoder passwordEncoder;
   @Mock
   private JwtProvider jwtProvider;
+  @Mock
+  private Validator validator;
 
   @BeforeEach
   void setUp() {
@@ -104,20 +108,20 @@ public class MemberServiceTest {
   void 닉네임_중복_확인() {
     when(memberRepository.existsByNickname(any())).thenReturn(true);
 
-    ResponseDTO<Boolean> response = memberService.checkNickname("nickname");
+    ResponseDTO<DuplicationCheckDTO> response = memberService.checkNickname("nickname");
 
     assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getData()).isTrue();
+    assertThat(response.getData()).isEqualTo(new DuplicationCheckDTO(true));
   }
 
   @Test
   void 이메일_중복_확인() {
     when(memberRepository.existsByEmail(any())).thenReturn(true);
 
-    ResponseDTO<Boolean> response = memberService.checkEmail("test@example.com");
+    ResponseDTO<DuplicationCheckDTO> response = memberService.checkEmail("test@example.com");
 
     assertThat(response.getStatus()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getData()).isTrue();
+    assertThat(response.getData()).isEqualTo(new DuplicationCheckDTO(true));
   }
 
   @Test

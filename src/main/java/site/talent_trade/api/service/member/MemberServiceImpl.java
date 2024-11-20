@@ -11,6 +11,7 @@ import site.talent_trade.api.dto.auth.request.RefreshTokenDTO;
 import site.talent_trade.api.dto.auth.response.TokenPairDTO;
 import site.talent_trade.api.dto.member.request.SigninDTO;
 import site.talent_trade.api.dto.member.request.SignupDTO;
+import site.talent_trade.api.dto.member.response.DuplicationCheckDTO;
 import site.talent_trade.api.repository.member.MemberRepository;
 import site.talent_trade.api.util.Validator;
 import site.talent_trade.api.util.exception.CustomException;
@@ -76,19 +77,23 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public ResponseDTO<Boolean> checkNickname(String nickname) {
+  public ResponseDTO<DuplicationCheckDTO> checkNickname(String nickname) {
     // 닉네임 중복 확인
     // 닉네임이 존재하면 true, 존재하지 않으면 false
-    Boolean isExist = memberRepository.existsByNickname(nickname);
-    return new ResponseDTO<>(isExist, HttpStatus.OK);
+    DuplicationCheckDTO response = new DuplicationCheckDTO(
+        memberRepository.existsByNickname(nickname)
+    );
+    return new ResponseDTO<>(response, HttpStatus.OK);
   }
 
   @Override
-  public ResponseDTO<Boolean> checkEmail(String email) {
+  public ResponseDTO<DuplicationCheckDTO> checkEmail(String email) {
     // 이메일 중복 확인
     // 이메일이 존재하면 true, 존재하지 않으면 false
-    Boolean isExist = memberRepository.existsByEmail(email);
-    return new ResponseDTO<>(isExist, HttpStatus.OK);
+    DuplicationCheckDTO response = new DuplicationCheckDTO(
+        memberRepository.existsByEmail(email)
+    );
+    return new ResponseDTO<>(response, HttpStatus.OK);
   }
 
   @Override
