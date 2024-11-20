@@ -47,15 +47,7 @@ public class Post {
       mappedBy="post"를 통해 연관관계의 주인은 Comment */
 
     //조회수 증가
-    public Post incrementHitCount() {
-        return Post.builder()
-                .id(this.id)
-                .member(this.member)
-                .title(this.title)
-                .content(this.content)
-                .hitCount(this.hitCount + 1)
-                .timestamp(this.timestamp)
-                .comments(this.comments)
-                .build();
+    public void incrementHitCount() {
+        this.hitCount++;
     }
 }
