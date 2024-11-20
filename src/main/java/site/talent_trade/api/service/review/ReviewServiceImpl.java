@@ -9,6 +9,7 @@ import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.domain.member.Member;
 import site.talent_trade.api.domain.review.Review;
 import site.talent_trade.api.dto.review.request.ReviewRequestDTO;
+import site.talent_trade.api.dto.review.response.ReviewListDTO;
 import site.talent_trade.api.dto.review.response.ReviewResponseDTO;
 import site.talent_trade.api.repository.chat.ChatRoomRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
@@ -28,7 +29,7 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   @Transactional
-  public ResponseDTO<Void> writeReview(Long fromMemberId, Long toMemberId,
+  public ResponseDTO<ReviewResponseDTO> writeReview(Long fromMemberId, Long toMemberId,
       ReviewRequestDTO request) {
     if (fromMemberId.equals(toMemberId)) {
       throw new CustomException(ExceptionStatus.CAN_NOT_WRITE_REIVEW_TO_MYSELF);
@@ -52,15 +53,16 @@ public class ReviewServiceImpl implements ReviewService {
         .build();
     reviewRepository.save(review);
 
-    return new ResponseDTO<>(null, HttpStatus.CREATED);
+    ReviewResponseDTO response = new ReviewResponseDTO(review);
+    return new ResponseDTO<>(response, HttpStatus.CREATED);
   }
 
   @Override
-  public ResponseDTO<ReviewResponseDTO> getReview(Long memberId) {
+  public ResponseDTO<ReviewListDTO> getReview(Long memberId) {
     Member member = memberRepository.findMemberWithProfileById(memberId);
 
     List<Review> reviews = reviewRepository.findByMemberId(memberId);
-    ReviewResponseDTO response = new ReviewResponseDTO(
+    ReviewListDTO response = new ReviewListDTO(
         member.getProfile().getReviewCnt(),
         member.getProfile().getScoreAvg(),
         reviews

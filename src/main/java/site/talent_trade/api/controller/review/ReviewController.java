@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.talent_trade.api.dto.review.request.ReviewRequestDTO;
+import site.talent_trade.api.dto.review.response.ReviewListDTO;
 import site.talent_trade.api.dto.review.response.ReviewResponseDTO;
 import site.talent_trade.api.service.review.ReviewService;
 import site.talent_trade.api.util.jwt.JwtProvider;
@@ -23,17 +24,16 @@ public class ReviewController {
   private final JwtProvider jwtProvider;
 
   @PostMapping("/write/{toMemberId}")
-  public ResponseDTO<Void> writeReview(@PathVariable Long toMemberId,
+  public ResponseDTO<ReviewResponseDTO> writeReview(@PathVariable Long toMemberId,
       HttpServletRequest httpServletRequest,
-      @RequestBody ReviewRequestDTO request)
-  {
+      @RequestBody ReviewRequestDTO request) {
     Long fromMemberId = jwtProvider.validateToken(httpServletRequest);
     return reviewService.writeReview(fromMemberId, toMemberId, request);
   }
 
 
   @GetMapping("/get/{memberId}")
-  public ResponseDTO<ReviewResponseDTO> getReview(@PathVariable Long memberId,
+  public ResponseDTO<ReviewListDTO> getReview(@PathVariable Long memberId,
       HttpServletRequest httpServletRequest) {
     jwtProvider.validateToken(httpServletRequest);
     return reviewService.getReview(memberId);
