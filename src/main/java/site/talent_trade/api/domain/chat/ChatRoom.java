@@ -56,4 +56,9 @@ public class ChatRoom {
         this.lastMessage = lastMessage;
         this.lastMessageAt = lastMessageAt;
     }
+
+    public void completeChatRoom() {
+        this.isCompleted = true;  // 채팅방 상태를 true로 설정
+        this.completedAt = LocalDateTime.now();  // 현재 시간 저장
+    }
 }
