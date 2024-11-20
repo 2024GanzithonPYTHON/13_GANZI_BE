@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -23,11 +24,13 @@ import site.talent_trade.api.domain.image.Image;
 import site.talent_trade.api.domain.member.Gender;
 import site.talent_trade.api.domain.member.Member;
 
-@Entity @Getter
+@Entity
+@Getter
 @NoArgsConstructor
 public class Profile {
 
-  @Id @Column(name = "profile_id")
+  @Id
+  @Column(name = "profile_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
@@ -38,17 +41,20 @@ public class Profile {
       fetch = FetchType.LAZY)
   private List<Image> images = new ArrayList<>();
 
-  @Lob @Size(max = 500)
+  @Lob
+  @Size(max = 500)
   @Column(columnDefinition = "TEXT", length = 500)
   private String talentIntro;
 
-  @Lob @Size(max = 500)
+  @Lob
+  @Size(max = 500)
   @Column(columnDefinition = "TEXT", length = 500)
   private String experienceIntro;
 
   private String portfolio;
 
-  @Size(max = 70) @Column(length = 70)
+  @Size(max = 70)
+  @Column(length = 70)
   private String region;
 
   private int tradeCnt;
@@ -77,13 +83,32 @@ public class Profile {
   }
 
   public void updateProfile(String talentIntro, String experienceIntro, String portfolio,
-      String region, MeetingType meetingType, Gender preferGender)
-  {
-    if (talentIntro != null) this.talentIntro = talentIntro;
-    if (experienceIntro != null) this.experienceIntro = experienceIntro;
-    if (portfolio != null) this.portfolio = portfolio;
-    if (region != null) this.region = region;
-    if (meetingType != null) this.meetingType = meetingType;
-    if (preferGender != null) this.preferGender = preferGender;
+      String region, MeetingType meetingType, Gender preferGender) {
+    if (talentIntro != null) {
+      this.talentIntro = talentIntro;
+    }
+    if (experienceIntro != null) {
+      this.experienceIntro = experienceIntro;
+    }
+    if (portfolio != null) {
+      this.portfolio = portfolio;
+    }
+    if (region != null) {
+      this.region = region;
+    }
+    if (meetingType != null) {
+      this.meetingType = meetingType;
+    }
+    if (preferGender != null) {
+      this.preferGender = preferGender;
+    }
+  }
+
+  /*리뷰 점수 반영*/
+  public void updateScore(int score) {
+    this.reviewCnt++;
+    this.scoreAccum += score;
+    this.scoreAvg = BigDecimal.valueOf(this.scoreAccum)
+        .divide(BigDecimal.valueOf(this.reviewCnt), 1, RoundingMode.HALF_UP);
   }
 }

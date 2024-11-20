@@ -43,6 +43,7 @@ public class Review {
     this.fromMember = fromMember;
     this.fromMember.getMyReviews().add(this);
     this.toMember = toMember;
+    toMember.getProfile().updateScore(score);
     this.score = score;
     this.content = content;
     this.timestamp = new Timestamp();
