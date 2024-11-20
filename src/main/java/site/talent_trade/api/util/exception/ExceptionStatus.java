@@ -39,6 +39,7 @@ public enum ExceptionStatus {
   PROFILE_NOT_FOUND(404, "Profile not exists"),
   IMAGE_NOT_FOUND(404, "Image not exists"),
   POST_NOT_FOUND(404,"Post not exists" ),
+  CHAT_ROOM_NOT_FOUND(404,"ChatRoom not exists"),
 
   /*409 CONFLICT*/
   CONFLICT(409, "Conflict"),
