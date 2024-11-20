@@ -1,14 +1,17 @@
 package site.talent_trade.api.controller.chat;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.dto.chat.response.ChatRoomResponseDTO;
 import site.talent_trade.api.service.chat.ChatRoomService;
+import site.talent_trade.api.util.jwt.JwtProvider;
 import site.talent_trade.api.util.response.ResponseDTO;
 
+import java.net.http.HttpRequest;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -22,15 +25,20 @@ public class ChatRoomController {
     @Autowired
     private ChatRoomService chatRoomService;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     //채팅방 생성
     @PostMapping("/createChatRoom")
-    public ResponseDTO<ChatRoomResponseDTO> createChatRoom(@RequestParam Long fromMemberId,@RequestParam Long toMemberId) {
+    public ResponseDTO<ChatRoomResponseDTO> createChatRoom(HttpServletRequest request, @RequestParam Long toMemberId) {
+        Long fromMemberId = jwtProvider.validateToken(request);
         return chatRoomService.createChatRoom(fromMemberId, toMemberId);
     }
 
     // 내가 참여한 채팅방 조회
     @GetMapping("/getChatRoomList")
-    public ResponseDTO<List<ChatRoomResponseDTO>> getMyChatRooms(@RequestParam Long memberId) {
+    public ResponseDTO<List<ChatRoomResponseDTO>> getMyChatRooms(HttpServletRequest request) {
+        Long memberId = jwtProvider.validateToken(request);
         return chatRoomService.getChatRoomList(memberId);
     }
 
