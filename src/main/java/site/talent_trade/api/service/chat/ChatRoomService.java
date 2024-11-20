@@ -2,6 +2,7 @@ package site.talent_trade.api.service.chat;
 
 import org.springframework.stereotype.Service;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.dto.chat.response.ChatRoomCompletedDTO;
 import site.talent_trade.api.dto.chat.response.ChatRoomResponseDTO;
 import site.talent_trade.api.dto.member.response.MemberResponseDTO;
 import site.talent_trade.api.util.response.ResponseDTO;
@@ -29,5 +30,5 @@ public interface ChatRoomService {
 
     //성사됐는지 안됐는지 판단
 
-
+    ResponseDTO<ChatRoomCompletedDTO> completeChatRoom(Long chatRoomId);
 }

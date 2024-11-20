@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.dto.chat.response.ChatRoomCompletedDTO;
 import site.talent_trade.api.dto.chat.response.ChatRoomResponseDTO;
 import site.talent_trade.api.dto.member.response.MemberResponseDTO;
 import site.talent_trade.api.repository.chat.ChatRoomRepository;
@@ -55,8 +56,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         // 메시지 횟수 증가
         fromMember.incrementMessageLimit();
+        memberRepository.save(fromMember);
 
         chatRoomRepository.save(chatRoom);
+
 
         // DTO로 변환 후 반환
         ChatRoomResponseDTO chatRoomResponseDTO = ChatRoomResponseDTO.builder()
@@ -64,6 +67,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .opponentNickname(toMember.getNickname())
                 .talent(toMember.getMyTalent())
                 .detailTalent(toMember.getMyTalentDetail())
+                .is_completed(chatRoom.isCompleted())
                 .build();
 
         // ResponseDTO 래핑하여 반환
@@ -80,11 +84,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     Member opponent = chatRoom.getFromMember().getId().equals(memberId) ? chatRoom.getToMember() : chatRoom.getFromMember();
 
                     return ChatRoomResponseDTO.builder()
+                            .roomId(chatRoom.getId())
                             .opponentNickname(opponent.getNickname())   // 상대방의 닉네임
                             .talent(opponent.getMyTalent())               // 상대방의 재능
                             .detailTalent(opponent.getMyTalentDetail())   // 상대방의 세부 재능
                             .lastMessage(chatRoom.getLastMessage())     // 마지막 메시지
                             .lastMessageAt(chatRoom.getLastMessageAt()) // 마지막 메시지 시간
+                            .is_completed(chatRoom.isCompleted())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -116,6 +122,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .opponentNickname(chatRoom.getFromMember().getNickname())  // 예시로 'fromMember' 사용
                 .talent(chatRoom.getFromMember().getMyTalent())
                 .detailTalent(chatRoom.getFromMember().getMyTalentDetail())
+                .is_completed(chatRoom.isCompleted())
                 .build();
 
         return new ResponseDTO<>(chatRoomResponseDTO, HttpStatus.OK);
@@ -133,6 +140,28 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         chatRoomRepository.save(chatRoom);
 
+    }
+    @Transactional
+    @Override
+    public ResponseDTO<ChatRoomCompletedDTO> completeChatRoom(Long chatRoomId) {
+        // 채팅방 조회
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new CustomException(ExceptionStatus.CHAT_ROOM_NOT_FOUND));
+
+        // 상태 업데이트
+        chatRoom.completeChatRoom();
+
+        chatRoomRepository.save(chatRoom);
+
+        // DTO로 변환 후 반환
+        ChatRoomCompletedDTO chatRoomCompletedDTO = ChatRoomCompletedDTO.builder()
+                .roomId(chatRoom.getId())
+                .is_completed(chatRoom.isCompleted())
+                .completedAt(chatRoom.getCompletedAt())
+                .build();
+
+        // 응답 반환
+        return new ResponseDTO<>(chatRoomCompletedDTO, HttpStatus.OK);
     }
 
     private MemberResponseDTO convertToMemberResponseDTO(Member member) {
