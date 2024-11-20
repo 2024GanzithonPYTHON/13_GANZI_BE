@@ -11,6 +11,7 @@ import site.talent_trade.api.dto.auth.request.RefreshTokenDTO;
 import site.talent_trade.api.dto.auth.response.TokenPairDTO;
 import site.talent_trade.api.dto.member.request.SigninDTO;
 import site.talent_trade.api.dto.member.request.SignupDTO;
+import site.talent_trade.api.dto.member.response.DuplicationCheckDTO;
 import site.talent_trade.api.service.member.MemberService;
 import site.talent_trade.api.util.response.ResponseDTO;
 
@@ -37,12 +38,12 @@ public class MemberController {
   }
 
   @GetMapping("/email/duplicate")
-  public ResponseDTO<Boolean> checkEmail(@RequestParam String email) {
+  public ResponseDTO<DuplicationCheckDTO> checkEmail(@RequestParam String email) {
     return memberService.checkEmail(email);
   }
 
   @GetMapping("/nickname/duplicate")
-  public ResponseDTO<Boolean> checkNickname(@RequestParam String nickname) {
+  public ResponseDTO<DuplicationCheckDTO> checkNickname(@RequestParam String nickname) {
     return memberService.checkNickname(nickname);
   }
 }

@@ -53,4 +53,25 @@ public class Validator {
       throw new CustomException(ExceptionStatus.NAME_TOO_LONG);
     }
   }
+
+  /*한줄 소개 유효성 검사*/
+  public void validateMyComment(String myComment) {
+    if (70 < myComment.length()) {
+      throw new CustomException(ExceptionStatus.MY_COMMENT_TOO_LONG);
+    }
+  }
+
+  /*재능, 경험 소개 유효성 검사*/
+  public void validateIntro(String intro) {
+    if (500 < intro.length()) {
+      throw new CustomException(ExceptionStatus.MY_COMMENT_TOO_LONG);
+    }
+  }
+
+  /*선호 지역 유효성 검사*/
+  public void validateRegion(String region) {
+    if (70 < region.length()) {
+      throw new CustomException(ExceptionStatus.REGION_TOO_LONG);
+    }
+  }
 }

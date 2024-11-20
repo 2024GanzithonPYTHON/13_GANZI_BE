@@ -75,14 +75,16 @@ public class Member {
     this.gender = gender;
 
     this.messageLimit = 0;
-    this.lastLoginAt = LocalDateTime.now();
-    this.timestamp = new Timestamp();
-    this.profile = new Profile();
+    LocalDateTime now = LocalDateTime.now();
+    this.lastLoginAt = now;
+    this.timestamp = new Timestamp(now);
+    this.profile = new Profile(this);
   }
 
-  /* 재능, 한 줄 소개 수정 메소드 */
-  public void updateTalent(Talent myTalent, String myTalentDetail, Talent wishTalent,
+  /* 닉네임, 재능, 한 줄 소개 수정 메소드 */
+  public void updateMember(String nickname, Talent myTalent, String myTalentDetail, Talent wishTalent,
       String myComment) {
+    if (nickname != null) this.nickname = nickname;
     if (myTalent != null) this.myTalent = myTalent;
     if (myTalentDetail != null) this.myTalentDetail = myTalentDetail;
     if (wishTalent != null) this.wishTalent = wishTalent;
