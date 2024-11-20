@@ -33,10 +33,11 @@ public class ProfileServiceImpl implements ProfileService {
   @Transactional
   public ResponseDTO<Void> editProfile(Long memberId, ProfileEditDTO request) {
     // 유효성 검사
-    validator.validateNickname(request.getNickname());
-    validator.validateIntro(request.getTalentIntro(), request.getExperienceIntro());
-    validator.validateMyComment(request.getMyComment());
-    validator.validateRegion(request.getRegion());
+    if (request.getNickname() != null) validator.validateNickname(request.getNickname());
+    if (request.getTalentIntro() != null) validator.validateIntro(request.getTalentIntro());
+    if (request.getExperienceIntro() != null) validator.validateIntro(request.getExperienceIntro());
+    if (request.getMyComment() != null) validator.validateIntro(request.getMyComment());
+    if (request.getRegion() != null) validator.validateRegion(request.getRegion());
 
     Profile profile = profileRepository.findProfileWithMemberById(memberId);
 
@@ -76,11 +77,13 @@ public class ProfileServiceImpl implements ProfileService {
   /*이미지 추가*/
   private void uploadImage(Profile profile, List<MultipartFile> images) {
     images.forEach(image -> {
-       ImageUrlPairDTO imageUrlPair = s3Connector.uploadImage(image);
-      Image.builder()
+      ImageUrlPairDTO imageUrlPair = s3Connector.uploadImage(image);
+      Image savedImage = Image.builder()
           .profile(profile)
           .originalImageUrl(imageUrlPair.getOriginalImageUrl())
-          .thumbnailImageUrl(imageUrlPair.getThumbnailImageUrl());
+          .thumbnailImageUrl(imageUrlPair.getThumbnailImageUrl())
+          .build();
+      imageRepository.save(savedImage);
     });
   }
 

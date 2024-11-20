@@ -48,7 +48,8 @@ public class MemberServiceTest {
 
   @Test
   void 회원가입_성공() {
-    SignupDTO signupDTO = new SignupDTO("test@example.com", "password", "name", "nickname", "2000-01-01", "010-1234-5678");
+    SignupDTO signupDTO = new SignupDTO("test@example.com", "password", "name", "nickname",
+        "2000-01-01", "010-1234-5678", "MALE");
     Member member = Member.builder()
         .email(signupDTO.getEmail())
         .password(signupDTO.getPassword())
@@ -99,7 +100,8 @@ public class MemberServiceTest {
     when(memberRepository.findByEmail(any())).thenReturn(member);
     when(passwordEncoder.matches(any(), any())).thenReturn(false);
 
-    CustomException exception = assertThrows(CustomException.class, () -> memberService.signin(signinDTO));
+    CustomException exception = assertThrows(CustomException.class,
+        () -> memberService.signin(signinDTO));
 
     assertThat(exception.getExceptionStatus()).isEqualTo(ExceptionStatus.WRONG_PASSWORD);
   }

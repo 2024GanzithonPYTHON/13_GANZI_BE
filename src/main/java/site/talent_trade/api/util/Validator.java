@@ -62,11 +62,8 @@ public class Validator {
   }
 
   /*재능, 경험 소개 유효성 검사*/
-  public void validateIntro(String talentIntro, String experienceIntro) {
-    if (500 < talentIntro.length()) {
-      throw new CustomException(ExceptionStatus.MY_COMMENT_TOO_LONG);
-    }
-    if (500 < experienceIntro.length()) {
+  public void validateIntro(String intro) {
+    if (500 < intro.length()) {
       throw new CustomException(ExceptionStatus.MY_COMMENT_TOO_LONG);
     }
   }

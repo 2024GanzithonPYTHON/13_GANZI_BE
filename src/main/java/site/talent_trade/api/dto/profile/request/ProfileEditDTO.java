@@ -1,6 +1,8 @@
 package site.talent_trade.api.dto.profile.request;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 import site.talent_trade.api.domain.member.Gender;
@@ -34,12 +36,13 @@ public class ProfileEditDTO {
     this.wishTalent = Talent.valueOf(wishTalent);
     this.myComment = myComment;
     this.talentIntro = talentIntro;
-    this.deletedImages = deletedImages;
-    this.images = images;
     this.experienceIntro = experienceIntro;
     this.portfolio = portfolio;
     this.region = region;
     this.meetingType = MeetingType.valueOf(meetingType);
     this.preferGender = Gender.valueOf(preferGender);
+
+    this.deletedImages = Objects.requireNonNullElseGet(deletedImages, ArrayList::new);
+    this.images = Objects.requireNonNullElseGet(images, ArrayList::new);
   }
 }

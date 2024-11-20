@@ -17,12 +17,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.image.Image;
 import site.talent_trade.api.domain.member.Gender;
 import site.talent_trade.api.domain.member.Member;
 
 @Entity @Getter
+@NoArgsConstructor
 public class Profile {
 
   @Id @Column(name = "profile_id")

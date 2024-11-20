@@ -29,6 +29,8 @@ public class ProfileDetailDTO {
   private BigDecimal scoreAvg;
 
   public ProfileDetailDTO(Profile profile) {
+    this.gender = profile.getMember().getGender();
+    this.preferGender = profile.getPreferGender();
     this.myTalent = profile.getMember().getMyTalent();
     this.myTalentDetail = profile.getMember().getMyTalentDetail();
     this.wishTalent = profile.getMember().getWishTalent();

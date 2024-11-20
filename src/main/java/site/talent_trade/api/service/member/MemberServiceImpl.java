@@ -47,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
         .nickname(request.getNickname())
         .birth(LocalDate.parse(request.getBirth()))
         .phone(request.getPhone())
+        .gender(request.getGender())
         .build();
     memberRepository.save(member);
 
