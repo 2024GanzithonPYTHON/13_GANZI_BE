@@ -1,7 +1,8 @@
 package site.talent_trade.api.service.community;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,6 @@ import site.talent_trade.api.domain.community.Post;
 import site.talent_trade.api.domain.community.PostSpecification;
 import site.talent_trade.api.domain.community.SortBy;
 import site.talent_trade.api.domain.member.Member;
-import site.talent_trade.api.domain.member.Talent;
 import site.talent_trade.api.dto.commnuity.request.PostRequestDTO;
 import site.talent_trade.api.dto.commnuity.response.CommentResponseDTO;
 import site.talent_trade.api.dto.commnuity.response.PostDetailDTO;
@@ -20,12 +20,6 @@ import site.talent_trade.api.repository.member.MemberRepository;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
-
-import java.sql.Time;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -43,15 +37,12 @@ public class PostServiceImpl implements PostService {
         Member writer = memberRepository.findById(postRequestDTO.getWriterId())
                 .orElseThrow(() -> new CustomException(ExceptionStatus.MEMBER_NOT_FOUND));
 
-        // Timestamp 생성
-        Timestamp timestamp = Timestamp.create(); // create() 사용
-
         Post newPost = Post.builder()
                 .member(writer)
                 .title(postRequestDTO.getTitle())
                 .content(postRequestDTO.getContent())
                 .hitCount(postRequestDTO.getHitCount())
-                .timestamp(timestamp)
+                .timestamp(new Timestamp())
                 .build();
 
         Post savedPost = postRepository.save(newPost);

@@ -8,9 +8,7 @@ import site.talent_trade.api.domain.community.Comment;
 import site.talent_trade.api.domain.community.Post;
 import site.talent_trade.api.domain.member.Member;
 import site.talent_trade.api.dto.commnuity.request.CommentRequestDTO;
-import site.talent_trade.api.dto.commnuity.request.PostRequestDTO;
 import site.talent_trade.api.dto.commnuity.response.CommentResponseDTO;
-import site.talent_trade.api.dto.commnuity.response.PostResponseDTO;
 import site.talent_trade.api.repository.community.CommentRepository;
 import site.talent_trade.api.repository.community.PostRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
@@ -38,13 +36,11 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new CustomException(ExceptionStatus.MEMBER_NOT_FOUND));
 
         Post post = postRepository.getReferenceById(commentRequestDTO.getPostId());
-        // Timestamp 생성
-        Timestamp timestamp = Timestamp.create(); // create() 사용
 
         Comment newComment = Comment.builder()
                 .content(commentRequestDTO.getContent())
                 .post(post)
-                .timestamp(timestamp)
+                .timestamp(new Timestamp())
                 .member(writer)
                 .build();
 

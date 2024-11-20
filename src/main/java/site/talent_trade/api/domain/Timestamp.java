@@ -4,7 +4,6 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EntityListeners;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,7 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @Embeddable
 @EntityListeners(AuditingEntityListener.class)
-@NoArgsConstructor
 public class Timestamp {
 
   @CreatedDate
@@ -23,13 +21,14 @@ public class Timestamp {
   @LastModifiedDate
   private LocalDateTime modifiedAt;
 
-  public Timestamp(LocalDateTime createdAt, LocalDateTime modifiedAt) {
-    this.createdAt = createdAt;
-    this.modifiedAt = modifiedAt;
+  public Timestamp() {
+    LocalDateTime now = LocalDateTime.now();
+    this.createdAt = now;
+    this.modifiedAt = now;
   }
 
-  public static Timestamp create() {
-    LocalDateTime now = LocalDateTime.now();
-    return new Timestamp(now, now);
+  public Timestamp(LocalDateTime now) {
+    this.createdAt = now;
+    this.modifiedAt = now;
   }
 }

@@ -75,8 +75,9 @@ public class Member {
     this.gender = gender;
 
     this.messageLimit = 0;
-    this.lastLoginAt = LocalDateTime.now();
-    this.timestamp = new Timestamp();
+    LocalDateTime now = LocalDateTime.now();
+    this.lastLoginAt = now;
+    this.timestamp = new Timestamp(now);
     this.profile = new Profile(this);
   }
 
