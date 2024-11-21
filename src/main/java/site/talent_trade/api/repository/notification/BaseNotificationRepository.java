@@ -12,6 +12,9 @@ public interface BaseNotificationRepository {
   /*유저 ID로 알림 조회*/
   List<Notification> findAllByMemberId(Long memberId);
 
+  /*확인하지 않은 알림만 조회*/
+  List<Notification> findUncheckedNotificationsByMemberId(Long memberId);
+
   /*메시지에 해당하는 기존 알림이 있는지 조회*/
   Optional<Notification> findByChatRoomId(Long fromMemberId, Long chatRoomId);
 }

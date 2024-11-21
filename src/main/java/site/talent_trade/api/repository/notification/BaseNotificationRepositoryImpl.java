@@ -41,6 +41,16 @@ public class BaseNotificationRepositoryImpl implements BaseNotificationRepositor
   }
 
   @Override
+  public List<Notification> findUncheckedNotificationsByMemberId(Long memberId) {
+    return em.createQuery("select n from Notification n"
+            + " left join fetch n.toMember tm"
+            + " where tm.id = :memberId"
+            + " and n.checked = false", Notification.class)
+        .setParameter("memberId", memberId)
+        .getResultList();
+  }
+
+  @Override
   public Optional<Notification> findByChatRoomId(Long fromMemberId, Long chatRoomId) {
     try {
       return Optional.of(em.createQuery("select n from Notification n"

@@ -31,4 +31,13 @@ public class NotificationServiceImpl implements NotificationService {
     notification.checkNotification();
     return new ResponseDTO<>(null, HttpStatus.OK);
   }
+
+  @Override
+  @Transactional
+  public ResponseDTO<Void> checkAllNotification(Long memberId) {
+    List<Notification> notifications = notificationRepository.findUncheckedNotificationsByMemberId(
+        memberId);
+    notifications.forEach(Notification::checkNotification);
+    return new ResponseDTO<>(null, HttpStatus.OK);
+  }
 }

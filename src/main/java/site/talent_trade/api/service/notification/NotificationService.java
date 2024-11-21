@@ -10,4 +10,7 @@ public interface NotificationService {
 
   /*알림 읽음 처리*/
   public ResponseDTO<Void> checkNotification(Long notificationId);
+
+  /*알림 모두 읽음 처리*/
+  public ResponseDTO<Void> checkAllNotification(Long memberId);
 }
