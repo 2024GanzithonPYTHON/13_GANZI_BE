@@ -7,11 +7,14 @@ import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.community.Comment;
 import site.talent_trade.api.domain.community.Post;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.domain.notification.Notification;
+import site.talent_trade.api.domain.notification.NotificationType;
 import site.talent_trade.api.dto.commnuity.request.CommentRequestDTO;
 import site.talent_trade.api.dto.commnuity.response.CommentResponseDTO;
 import site.talent_trade.api.repository.community.CommentRepository;
 import site.talent_trade.api.repository.community.PostRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
+import site.talent_trade.api.repository.notification.NotificationRepository;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
@@ -27,6 +30,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     //댓글 작성
     @Override
@@ -45,6 +51,16 @@ public class CommentServiceImpl implements CommentService {
                 .build();
 
         Comment savedComment = commentRepository.save(newComment);
+
+        // 알림 생성
+        Notification notification = Notification.builder()
+            .fromMember(writer)
+            .toMember(post.getMember())
+            .type(NotificationType.COMMENT)
+            .content(newComment.getContent())
+            .contentId(newComment.getId())
+            .build();
+        notificationRepository.save(notification);
 
         //dto 반환
         CommentResponseDTO commentResponseDTO = CommentResponseDTO.builder()
