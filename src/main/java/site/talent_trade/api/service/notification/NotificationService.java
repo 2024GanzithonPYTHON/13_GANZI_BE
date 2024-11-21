@@ -13,9 +13,4 @@ public interface NotificationService {
 
   /*알림 모두 읽음 처리*/
   public ResponseDTO<Void> checkAllNotification(Long memberId);
-
-
-  public void markNotificationAsReadByContentId(Long contentId, Long memberId);
-
-
 }

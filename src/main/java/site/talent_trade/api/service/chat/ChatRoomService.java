@@ -1,14 +1,12 @@
 package site.talent_trade.api.service.chat;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
-import site.talent_trade.api.domain.member.Member;
 import site.talent_trade.api.dto.chat.response.ChatRoomCompletedDTO;
 import site.talent_trade.api.dto.chat.response.ChatRoomResponseDTO;
 import site.talent_trade.api.dto.member.response.MemberResponseDTO;
 import site.talent_trade.api.util.response.ResponseDTO;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public interface ChatRoomService {
@@ -29,6 +27,5 @@ public interface ChatRoomService {
     public void updateLastMessage(Long chatRoomId, String lastMessage, LocalDateTime lastMessageAt);
 
     //성사됐는지 안됐는지 판단
-
     ResponseDTO<ChatRoomCompletedDTO> completeChatRoom(Long chatRoomId);
 }

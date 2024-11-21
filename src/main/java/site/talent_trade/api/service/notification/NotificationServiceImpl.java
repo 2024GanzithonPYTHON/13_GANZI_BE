@@ -49,19 +49,4 @@ public class NotificationServiceImpl implements NotificationService {
     notifications.forEach(Notification::checkNotification);
     return new ResponseDTO<>(null, HttpStatus.OK);
   }
-
-  @Transactional
-  @Override
-  public void markNotificationAsReadByContentId(Long contentId, Long memberId) {
-    // contentId로 읽지 않은 알림 조회
-    Notification notification = notificationRepository.findByContentIdAndCheckedFalse(contentId);
-
-    // 알림 상태를 본인 알림일 때만 읽음으로 변경
-    if (!notification.getToMember().getId().equals(memberId)) {
-      throw new CustomException(ExceptionStatus.FORBIDDEN);
-    }
-    notification.checkNotification();
-    notificationRepository.save(notification);
-
-  }
 }

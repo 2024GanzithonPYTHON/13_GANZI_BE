@@ -52,18 +52,47 @@ public class BaseNotificationRepositoryImpl implements BaseNotificationRepositor
   }
 
   @Override
-  public Optional<Notification> findByChatRoomId(Long fromMemberId, Long chatRoomId) {
+  public Optional<Notification> findByFromMemberIdAndChatRoomId(Long fromMemberId, Long chatRoomId) {
     try {
       return Optional.of(em.createQuery("select n from Notification n"
               + " where n.fromMember.id = :fromMemberId"
-              + " and n.type = :message"
+              + " and n.type = :type"
               + " and n.contentId = :chatRoomId", Notification.class)
           .setParameter("fromMemberId", fromMemberId)
-          .setParameter("message", NotificationType.MESSAGE)
+          .setParameter("type", NotificationType.MESSAGE)
           .setParameter("chatRoomId", chatRoomId)
           .getSingleResult());
     } catch (NoResultException e) {
       return Optional.empty();
     }
+  }
+
+  @Override
+  public Optional<Notification> findByToMemberIdAndChatRoomId(Long toMemberId, Long chatRoomId) {
+    try {
+      return Optional.of(em.createQuery("select n from Notification n"
+              + " where n.toMember.id = :toMemberId"
+              + " and n.type = :type"
+              + " and n.contentId = :chatRoomId", Notification.class)
+          .setParameter("toMemberId", toMemberId)
+          .setParameter("type", NotificationType.MESSAGE)
+          .setParameter("chatRoomId", chatRoomId)
+          .getSingleResult());
+    } catch (NoResultException e) {
+      return Optional.empty();
+    }
+  }
+
+  @Override
+  public List<Notification> findUncheckedNotificationsByMemberIdAndPostId(Long memberId, Long postId) {
+    return em.createQuery("select n from Notification n"
+            + " where n.toMember.id = :memberId"
+            + " and n.type = :type"
+            + " and n.checked = false"
+            + " and n.contentId = :postId", Notification.class)
+        .setParameter("memberId", memberId)
+        .setParameter("type", NotificationType.COMMENT)
+        .setParameter("postId", postId)
+        .getResultList();
   }
 }

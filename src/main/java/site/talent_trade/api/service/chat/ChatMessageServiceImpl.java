@@ -60,7 +60,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         // 알림 최신화 혹은 생성
         Optional<Notification> notificationOptional =
-            notificationRepository.findByChatRoomId(message.getFromMember().getId(), message.getChatRoomId());
+            notificationRepository.findByFromMemberIdAndChatRoomId(
+                message.getFromMember().getId(), message.getChatRoomId()
+            );
 
         if (notificationOptional.isPresent()) {
             Notification notification = notificationOptional.get();
@@ -83,15 +85,16 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public ResponseDTO<List<MessageResponseDTO>> getMessagesByChatRoomId(Long roomId, Long memberId) {
 
         List<Message> messages = chatMessageRepository.findByChatRoomId(roomId); // 수정: 여러 메시지를 조회
-        //알림 상태 업데이트 (읽음 처리)
-        notificationService.markNotificationAsReadByContentId(roomId,memberId);
 
         // 메시지가 없을 경우 빈 리스트 반환
         if (messages.isEmpty()) {
             return new ResponseDTO<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
 
-//        Notification notification = notificationRepository.
+        Optional<Notification> optionalNotification =
+            notificationRepository.findByToMemberIdAndChatRoomId(memberId, roomId);
+        optionalNotification.ifPresent(Notification::checkNotification);
+
         // Message 객체를 MessageResponseDTO로 변환
         List<MessageResponseDTO> messageResponseDTOs = messages.stream()
                 .map(MessageResponseDTO::fromEntity)

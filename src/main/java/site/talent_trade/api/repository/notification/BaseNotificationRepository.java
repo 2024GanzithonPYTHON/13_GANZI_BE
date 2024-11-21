@@ -16,5 +16,11 @@ public interface BaseNotificationRepository {
   List<Notification> findUncheckedNotificationsByMemberId(Long memberId);
 
   /*메시지에 해당하는 기존 알림이 있는지 조회*/
-  Optional<Notification> findByChatRoomId(Long fromMemberId, Long chatRoomId);
+  Optional<Notification> findByFromMemberIdAndChatRoomId(Long fromMemberId, Long chatRoomId);
+
+  /*나의 해당 채팅방의 알림 조회*/
+  Optional<Notification> findByToMemberIdAndChatRoomId(Long toMemberId, Long chatRoomId);
+
+  /*게시글에 해당하는 기존 알림이 있는지 조회*/
+  List<Notification> findUncheckedNotificationsByMemberIdAndPostId(Long memberId, Long postId);
 }

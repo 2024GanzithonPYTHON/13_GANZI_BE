@@ -3,7 +3,6 @@ package site.talent_trade.api.service.community;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,13 +15,14 @@ import site.talent_trade.api.domain.community.Post;
 import site.talent_trade.api.domain.community.PostSpecification;
 import site.talent_trade.api.domain.community.SortBy;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.domain.notification.Notification;
 import site.talent_trade.api.dto.commnuity.request.PostRequestDTO;
 import site.talent_trade.api.dto.commnuity.response.CommentResponseDTO;
 import site.talent_trade.api.dto.commnuity.response.PostDetailDTO;
 import site.talent_trade.api.dto.commnuity.response.PostResponseDTO;
 import site.talent_trade.api.repository.community.PostRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
-import site.talent_trade.api.service.notification.NotificationService;
+import site.talent_trade.api.repository.notification.NotificationRepository;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
@@ -38,7 +38,7 @@ public class PostServiceImpl implements PostService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private NotificationService notificationService;
+    private NotificationRepository notificationRepository;
 
 
     //글 작성
@@ -157,6 +157,11 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ExceptionStatus.POST_NOT_FOUND));
 
+        List<Notification> notifications =
+            notificationRepository.findUncheckedNotificationsByMemberIdAndPostId(memberId, postId);
+        notifications.forEach(Notification::checkNotification);
+
+
         // 조회수 증가: 새로운 Post 객체 생성
         post.incrementHitCount();
         // 댓글 리스트가 null일 경우 빈 리스트로 처리하여 사이즈를 안전하게 호출
@@ -177,9 +182,6 @@ public class PostServiceImpl implements PostService {
         // 댓글에 대해 알림 상태 업데이트하고 댓글 목록 가져오기
         List<CommentResponseDTO> commentResponseDTOs = post.getComments().stream()
                 .map(comment -> {
-                    // 알림 상태 업데이트
-                    //log.info("comment>>>>>>" + comment.getId());
-                    notificationService.markNotificationAsReadByContentId(comment.getId(), memberId);  // Calling the notification service
 
                     // CommentResponseDTO 생성
                     CommentResponseDTO dto = CommentResponseDTO.builder()
