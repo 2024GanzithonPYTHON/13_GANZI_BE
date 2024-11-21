@@ -55,9 +55,9 @@ public class PostController {
     @GetMapping("/detail/{postId}")
     public ResponseDTO<PostDetailDTO> getPostDetail(HttpServletRequest request, @PathVariable Long postId) {
 
-        jwtProvider.validateToken(request);
+        Long memberId = jwtProvider.validateToken(request);
 
-        return postService.getPostDetail(postId);
+        return postService.getPostDetail(postId,memberId);
     }
 
     //마이페이지 -> 내가 쓴 게시물 가져오기(댓글 개수, 제목, 날짜)
