@@ -2,10 +2,22 @@ package site.talent_trade.api.domain.member;
 
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
+import site.talent_trade.api.domain.community.SortBy;
 
 public class MemberSpecification {
 
-  public static Specification<Member> orderByCreatedAt() {
+  public static Specification<Member> orderBy(SortBy sortBy) {
+    if (sortBy == null) {
+      return null;
+    }
+    return switch (sortBy) {
+      case REVIEW -> orderByReviewCnt();
+      case SCORE -> orderByScoreAvg();
+      default -> orderByCreatedAt();
+    };
+  }
+
+  private static Specification<Member> orderByCreatedAt() {
     return (root, query, criteriaBuilder) -> {
       if (query == null) {
         return null;
@@ -15,7 +27,7 @@ public class MemberSpecification {
     };
   }
 
-  public static Specification<Member> orderByReviewCnt() {
+  private static Specification<Member> orderByReviewCnt() {
     return (root, query, criteriaBuilder) -> {
       if (query == null) {
         return null;
@@ -26,7 +38,7 @@ public class MemberSpecification {
     };
   }
 
-  public static Specification<Member> orderByScoreAvg() {
+  private static Specification<Member> orderByScoreAvg() {
     return (root, query, criteriaBuilder) -> {
       if (query == null) {
         return null;

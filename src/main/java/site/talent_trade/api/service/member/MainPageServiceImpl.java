@@ -40,8 +40,8 @@ public class MainPageServiceImpl implements MainPageService {
     Specification<Member> spec = Specification.where(MemberSpecification.excludeMember(memberId));
     spec = spec.and(MemberSpecification.hasTalent(talent));
 
-    Specification<Member> sortedSpec = addSortQuery(spec, sortBy);
-    MemberPageDTO response = wrapPage(page, sortedSpec);
+    spec = spec.and(MemberSpecification.orderBy(sortBy));
+    MemberPageDTO response = wrapPage(page, spec);
     return new ResponseDTO<>(response, HttpStatus.OK);
   }
 
@@ -51,8 +51,8 @@ public class MainPageServiceImpl implements MainPageService {
     Specification<Member> spec = Specification.where(MemberSpecification.excludeMember(memberId));
     spec = spec.and(MemberSpecification.searchByKeyword(query));
 
-    Specification<Member> sortedSpec = addSortQuery(spec, sortBy);
-    MemberPageDTO response = wrapPage(page, sortedSpec);
+    spec = spec.and(MemberSpecification.orderBy(sortBy));
+    MemberPageDTO response = wrapPage(page, spec);
     return new ResponseDTO<>(response, HttpStatus.OK);
   }
 
@@ -64,19 +64,5 @@ public class MainPageServiceImpl implements MainPageService {
     List<Member> members = pagedMember.getContent();
     boolean hasNext = pagedMember.hasNext();
     return new MemberPageDTO(hasNext, page, members);
-  }
-
-  /*Specification 객체에 정렬 쿼리 추가*/
-  private Specification<Member> addSortQuery(Specification<Member> spec, SortBy sortBy) {
-    if (sortBy != null) {
-      spec = spec.and(switch (sortBy) {
-        case REVIEW -> MemberSpecification.orderByReviewCnt();
-        case SCORE -> MemberSpecification.orderByScoreAvg();
-        default -> MemberSpecification.orderByCreatedAt();
-      });
-    } else {
-      spec = spec.and(MemberSpecification.orderByCreatedAt());
-    }
-    return spec;
   }
 }
