@@ -3,6 +3,7 @@ package site.talent_trade.api.domain.profile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.image.Image;
 import site.talent_trade.api.domain.member.Gender;
@@ -27,6 +29,7 @@ import site.talent_trade.api.domain.member.Member;
 @Entity
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Profile {
 
   @Id

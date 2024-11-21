@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -21,15 +22,19 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.profile.Profile;
 import site.talent_trade.api.domain.review.Review;
 
-@Entity @Getter
+@Entity
+@Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
-  @Id @Column(name = "member_id")
+  @Id
+  @Column(name = "member_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
@@ -44,9 +49,11 @@ public class Member {
 
   private String email;
   private String password;
-  @Size(max = 10) @Column(length = 10)
+  @Size(max = 10)
+  @Column(length = 10)
   private String name;
-  @Size(max = 10) @Column(length = 10)
+  @Size(max = 10)
+  @Column(length = 10)
   private String nickname;
   private String phone;
   private LocalDate birth;
@@ -54,7 +61,8 @@ public class Member {
   @Enumerated(EnumType.STRING)
   private Gender gender;
 
-  @Size(max = 70) @Column(length = 70)
+  @Size(max = 70)
+  @Column(length = 70)
   private String myComment;
 
   @Enumerated(EnumType.STRING)
@@ -73,8 +81,7 @@ public class Member {
   /*생성자*/
   @Builder
   public Member(String email, String password, String name, String nickname, String phone,
-      LocalDate birth, Gender gender)
-  {
+      LocalDate birth, Gender gender) {
     this.email = email;
     this.password = password;
     this.name = name;
@@ -91,13 +98,24 @@ public class Member {
   }
 
   /* 닉네임, 재능, 한 줄 소개 수정 메소드 */
-  public void updateMember(String nickname, Talent myTalent, String myTalentDetail, Talent wishTalent,
+  public void updateMember(String nickname, Talent myTalent, String myTalentDetail,
+      Talent wishTalent,
       String myComment) {
-    if (nickname != null) this.nickname = nickname;
-    if (myTalent != null) this.myTalent = myTalent;
-    if (myTalentDetail != null) this.myTalentDetail = myTalentDetail;
-    if (wishTalent != null) this.wishTalent = wishTalent;
-    if (myComment != null) this.myComment = myComment;
+    if (nickname != null) {
+      this.nickname = nickname;
+    }
+    if (myTalent != null) {
+      this.myTalent = myTalent;
+    }
+    if (myTalentDetail != null) {
+      this.myTalentDetail = myTalentDetail;
+    }
+    if (wishTalent != null) {
+      this.wishTalent = wishTalent;
+    }
+    if (myComment != null) {
+      this.myComment = myComment;
+    }
   }
 
   /* 마지막 활동 시각 기록 메소드 */
@@ -121,5 +139,4 @@ public class Member {
   public void incrementMessageLimit() {
     this.messageLimit++;
   }
-
 }
