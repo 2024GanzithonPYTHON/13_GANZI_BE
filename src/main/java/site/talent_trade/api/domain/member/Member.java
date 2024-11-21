@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import site.talent_trade.api.domain.Timestamp;
+import site.talent_trade.api.domain.notification.Notification;
 import site.talent_trade.api.domain.profile.Profile;
 import site.talent_trade.api.domain.review.Review;
 
@@ -41,6 +42,9 @@ public class Member {
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "profile_id")
   private Profile profile;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "toMember")
+  private List<Notification> notifications = new ArrayList<>();
 
   // 작성받은 리뷰
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromMember")
