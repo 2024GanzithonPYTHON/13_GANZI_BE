@@ -62,8 +62,8 @@ public class MainPageServiceImpl implements MainPageService {
     Page<Member> pagedMember = memberRepository.findAll(spec, pageable);
 
     List<Member> members = pagedMember.getContent();
-    int nextPage = pagedMember.hasNext() ? page + 1 : 0;
-    return new MemberPageDTO(nextPage, members);
+    boolean hasNext = pagedMember.hasNext();
+    return new MemberPageDTO(hasNext, page, members);
   }
 
   /*Specification 객체에 정렬 쿼리 추가*/
