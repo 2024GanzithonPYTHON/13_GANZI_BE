@@ -1,5 +1,10 @@
 package site.talent_trade.api.service.chat;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -7,20 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.domain.chat.Message;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.domain.notification.Notification;
+import site.talent_trade.api.domain.notification.NotificationType;
 import site.talent_trade.api.dto.chat.request.MessagePayload;
 import site.talent_trade.api.dto.chat.response.MessageResponseDTO;
 import site.talent_trade.api.repository.chat.ChatMessageRepository;
 import site.talent_trade.api.repository.chat.ChatRoomRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
+import site.talent_trade.api.repository.notification.NotificationRepository;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly=true)
@@ -34,6 +36,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
 
     //메시지 보내기 , 가장 마지막 채팅 내역 ChatRoom의 lastMessage,lastMessageAt에 저장
@@ -49,6 +54,23 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             // save는 @Transactional이 처리하므로 불필요
         });
 
+        // 알림 최신화 혹은 생성
+        Optional<Notification> notificationOptional =
+            notificationRepository.findByChatRoomId(message.getFromMember().getId(), message.getChatRoomId());
+
+        if (notificationOptional.isPresent()) {
+            Notification notification = notificationOptional.get();
+            notification.updateMessageNotification(message);
+        } else {
+            Notification notification = Notification.builder()
+                .fromMember(message.getFromMember())
+                .toMember(message.getToMember())
+                .type(NotificationType.MESSAGE)
+                .content(message.getContent())
+                .contentId(message.getChatRoomId())
+                .build();
+            notificationRepository.save(notification);
+        }
     }
 
     //채팅방 상세 내용 조회
