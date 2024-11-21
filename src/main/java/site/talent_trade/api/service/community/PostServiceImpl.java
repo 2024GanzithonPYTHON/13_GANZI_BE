@@ -1,12 +1,17 @@
 package site.talent_trade.api.service.community;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.talent_trade.api.domain.Timestamp;
+import site.talent_trade.api.domain.community.Comment;
 import site.talent_trade.api.domain.community.Post;
 import site.talent_trade.api.domain.community.PostSpecification;
 import site.talent_trade.api.domain.community.SortBy;
@@ -17,11 +22,13 @@ import site.talent_trade.api.dto.commnuity.response.PostDetailDTO;
 import site.talent_trade.api.dto.commnuity.response.PostResponseDTO;
 import site.talent_trade.api.repository.community.PostRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
+import site.talent_trade.api.service.notification.NotificationService;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
 
 @Service
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     @Autowired
@@ -29,6 +36,10 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
 
     //글 작성
     @Override
@@ -137,8 +148,9 @@ public class PostServiceImpl implements PostService {
     }
 
     //상세 조회 -> 조회수 하나씩 증가
+    @Transactional
     @Override
-    public ResponseDTO<PostDetailDTO> getPostDetail(Long postId) {
+    public ResponseDTO<PostDetailDTO> getPostDetail(Long postId, Long memberId) {
 
 
         // 게시글 조회
@@ -149,22 +161,39 @@ public class PostServiceImpl implements PostService {
         post.incrementHitCount();
         // 댓글 리스트가 null일 경우 빈 리스트로 처리하여 사이즈를 안전하게 호출
         int commentCount = (post.getComments() != null) ? post.getComments().size() : 0;
-
-
+        log.info("Total comments: " + post.getComments().size());
+        // 댓글 리스트가 null일 경우 빈 리스트로 처리
+        List<Comment> comments = (post.getComments() != null) ? post.getComments() : new ArrayList<>();
+        System.out.println("Comments list: " + comments);
         // 변경된 Post 저장
         postRepository.save(post);
 
-        // 댓글 목록 가져오기
+        if (post.getComments() == null || post.getComments().isEmpty()) {
+            log.warn("No comments found for post ID: " + post.getId());
+        } else {
+            log.info("Comments list: " + post.getComments());
+        }
+
+        // 댓글에 대해 알림 상태 업데이트하고 댓글 목록 가져오기
         List<CommentResponseDTO> commentResponseDTOs = post.getComments().stream()
-                .map(comment -> CommentResponseDTO.builder()
-                        .commentId(comment.getId())
-                        .nickname(comment.getMember().getNickname())
-                        .content(comment.getContent())
-                        .talent(comment.getMember().getMyTalent().name())
-                        .talentDetail(comment.getMember().getMyTalentDetail())
-                        .createdAt(comment.getTimestamp().getCreatedAt())
-                        .gender(comment.getMember().getGender().name())
-                        .build())
+                .map(comment -> {
+                    // 알림 상태 업데이트
+                    //log.info("comment>>>>>>" + comment.getId());
+                    notificationService.markNotificationAsReadByContentId(comment.getId(), memberId);  // Calling the notification service
+
+                    // CommentResponseDTO 생성
+                    CommentResponseDTO dto = CommentResponseDTO.builder()
+                            .commentId(comment.getId())
+                            .nickname(comment.getMember().getNickname())
+                            .content(comment.getContent())
+                            .talent(comment.getMember().getMyTalent().name())
+                            .talentDetail(comment.getMember().getMyTalentDetail())
+                            .createdAt(comment.getTimestamp().getCreatedAt())
+                            .gender(comment.getMember().getGender().name())
+                            .build();
+                    //log.info("Created CommentResponseDTO: " + dto);  // Log the DTO
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
         // PostResponseDTO 객체 생성
