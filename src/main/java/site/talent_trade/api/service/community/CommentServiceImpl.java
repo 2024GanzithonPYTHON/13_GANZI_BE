@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
             .toMember(post.getMember())
             .type(NotificationType.COMMENT)
             .content(newComment.getContent())
-            .contentId(newComment.getId())
+            .contentId(post.getId())
             .build();
         notificationRepository.save(notification);
 
