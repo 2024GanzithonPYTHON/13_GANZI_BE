@@ -4,8 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import site.talent_trade.api.domain.notification.Notification;
+import site.talent_trade.api.domain.notification.NotificationType;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 
@@ -36,5 +38,21 @@ public class BaseNotificationRepositoryImpl implements BaseNotificationRepositor
             + " order by n.timestamp.createdAt desc", Notification.class)
         .setParameter("memberId", memberId)
         .getResultList();
+  }
+
+  @Override
+  public Optional<Notification> findByChatRoomId(Long fromMemberId, Long chatRoomId) {
+    try {
+      return Optional.of(em.createQuery("select n from Notification n"
+              + " where n.fromMember.id = :fromMemberId"
+              + " and n.type = :message"
+              + " and n.contentId = :chatRoomId", Notification.class)
+          .setParameter("fromMemberId", fromMemberId)
+          .setParameter("message", NotificationType.MESSAGE)
+          .setParameter("chatRoomId", chatRoomId)
+          .getSingleResult());
+    } catch (NoResultException e) {
+      return Optional.empty();
+    }
   }
 }
