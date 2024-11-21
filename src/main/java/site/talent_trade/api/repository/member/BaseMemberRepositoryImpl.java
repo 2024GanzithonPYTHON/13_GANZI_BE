@@ -3,8 +3,10 @@ package site.talent_trade.api.repository.member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.domain.member.Talent;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 
@@ -79,5 +81,17 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
     } catch (NoResultException e) {
       throw new CustomException(ExceptionStatus.MEMBER_NOT_FOUND);
     }
+  }
+
+  @Override
+  public List<Member> findRandomMemberByTalent(Long memberId, Talent talent) {
+    return em.createQuery("select m from Member m"
+            + " where m.myTalent =:talent"
+            + " and m.id !=:memberId"
+            + " order by function('RAND')", Member.class)
+        .setParameter("talent", talent)
+        .setParameter("memberId", memberId)
+        .setMaxResults(3)
+        .getResultList();
   }
 }
