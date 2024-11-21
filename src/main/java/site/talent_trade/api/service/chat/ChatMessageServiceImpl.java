@@ -20,6 +20,7 @@ import site.talent_trade.api.repository.chat.ChatMessageRepository;
 import site.talent_trade.api.repository.chat.ChatRoomRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
 import site.talent_trade.api.repository.notification.NotificationRepository;
+import site.talent_trade.api.service.notification.NotificationService;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
@@ -39,6 +40,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
 
     //메시지 보내기 , 가장 마지막 채팅 내역 ChatRoom의 lastMessage,lastMessageAt에 저장
@@ -74,15 +78,20 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     //채팅방 상세 내용 조회
+    @Transactional
     @Override
-    public ResponseDTO<List<MessageResponseDTO>> getMessagesByChatRoomId(Long roomId) {
+    public ResponseDTO<List<MessageResponseDTO>> getMessagesByChatRoomId(Long roomId, Long memberId) {
 
         List<Message> messages = chatMessageRepository.findByChatRoomId(roomId); // 수정: 여러 메시지를 조회
+        //알림 상태 업데이트 (읽음 처리)
+        notificationService.markNotificationAsReadByContentId(roomId,memberId);
 
         // 메시지가 없을 경우 빈 리스트 반환
         if (messages.isEmpty()) {
             return new ResponseDTO<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
+
+//        Notification notification = notificationRepository.
         // Message 객체를 MessageResponseDTO로 변환
         List<MessageResponseDTO> messageResponseDTOs = messages.stream()
                 .map(MessageResponseDTO::fromEntity)

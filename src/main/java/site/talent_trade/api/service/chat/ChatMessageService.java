@@ -14,7 +14,7 @@ public interface ChatMessageService {
     void saveMessage(Message message);
 
     // 특정 채팅방의 메시지 목록 조회
-    ResponseDTO<List<MessageResponseDTO>> getMessagesByChatRoomId(Long roomId);
+    ResponseDTO<List<MessageResponseDTO>> getMessagesByChatRoomId(Long roomId,Long memberId);
 
 
     //메시지 객체 생성 및 저장
