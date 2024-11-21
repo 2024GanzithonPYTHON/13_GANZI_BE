@@ -84,11 +84,13 @@ public class BaseMemberRepositoryImpl implements BaseMemberRepository {
   }
 
   @Override
-  public List<Member> findRandomMemberByTalent(Talent talent) {
+  public List<Member> findRandomMemberByTalent(Long memberId, Talent talent) {
     return em.createQuery("select m from Member m"
             + " where m.myTalent =:talent"
+            + " and m.id !=:memberId"
             + " order by function('RAND')", Member.class)
-        .setParameter("talent", talent.name())
+        .setParameter("talent", talent)
+        .setParameter("memberId", memberId)
         .setMaxResults(3)
         .getResultList();
   }

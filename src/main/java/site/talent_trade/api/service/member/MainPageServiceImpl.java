@@ -28,54 +28,55 @@ public class MainPageServiceImpl implements MainPageService {
   @Override
   public ResponseDTO<MemberListDTO> recommendMembers(Long memberId) {
     Member member = memberRepository.findByMemberId(memberId);
-    List<Member> members = memberRepository.findRandomMemberByTalent(member.getWishTalent());
+    List<Member> members = memberRepository.findRandomMemberByTalent(member.getId(),
+        member.getWishTalent());
     MemberListDTO response = new MemberListDTO(members);
     return new ResponseDTO<>(response, HttpStatus.OK);
   }
 
   @Override
-  public ResponseDTO<MemberPageDTO> getMainPageMembers(int page, Talent talent, SortBy sortBy) {
-    Specification<Member> spec;
-    if (sortBy != null) {
-      spec = switch (sortBy.name()) {
-        case "REVIEW" -> Specification.where(MemberSpecification.orderByReviewCnt());
-        case "SCORE" -> Specification.where(MemberSpecification.orderByScoreAvg());
-        default -> Specification.where(MemberSpecification.orderByCreatedAt());
-      };
-    } else {
-      spec = Specification.where(MemberSpecification.orderByCreatedAt());
-    }
+  public ResponseDTO<MemberPageDTO> getMainPageMembers(Long memberId, int page, Talent talent,
+      SortBy sortBy) {
+    Specification<Member> spec = Specification.where(MemberSpecification.excludeMember(memberId));
+    spec = spec.and(MemberSpecification.hasTalent(talent));
 
+    Specification<Member> sortedSpec = addSortQuery(spec, sortBy);
+    MemberPageDTO response = wrapPage(page, sortedSpec);
+    return new ResponseDTO<>(response, HttpStatus.OK);
+  }
+
+  @Override
+  public ResponseDTO<MemberPageDTO> searchMembers(Long memberId, int page, SortBy sortBy,
+      String query) {
+    Specification<Member> spec = Specification.where(MemberSpecification.excludeMember(memberId));
+    spec = spec.and(MemberSpecification.searchByKeyword(query));
+
+    Specification<Member> sortedSpec = addSortQuery(spec, sortBy);
+    MemberPageDTO response = wrapPage(page, sortedSpec);
+    return new ResponseDTO<>(response, HttpStatus.OK);
+  }
+
+  /*6명씩 페이지네이션하여 래핑*/
+  private MemberPageDTO wrapPage(int page, Specification<Member> spec) {
     Pageable pageable = PageRequest.of(page, 6);
     Page<Member> pagedMember = memberRepository.findAll(spec, pageable);
 
     List<Member> members = pagedMember.getContent();
     int nextPage = pagedMember.hasNext() ? page + 1 : 0;
-    MemberPageDTO response = new MemberPageDTO(nextPage, members);
-    return new ResponseDTO<>(response, HttpStatus.OK);
+    return new MemberPageDTO(nextPage, members);
   }
 
-  @Override
-  public ResponseDTO<MemberPageDTO> searchMembers(int page, SortBy sortBy, String query) {
-    Specification<Member> spec = Specification.where(MemberSpecification.searchByKeyword(query));
-
-    Specification<Member> orderedSpec;
+  /*Specification 객체에 정렬 쿼리 추가*/
+  private Specification<Member> addSortQuery(Specification<Member> spec, SortBy sortBy) {
     if (sortBy != null) {
-      orderedSpec = spec.and(switch (sortBy.name()) {
-        case "REVIEW" -> MemberSpecification.orderByReviewCnt();
-        case "SCORE" -> MemberSpecification.orderByScoreAvg();
+      spec = spec.and(switch (sortBy) {
+        case REVIEW -> MemberSpecification.orderByReviewCnt();
+        case SCORE -> MemberSpecification.orderByScoreAvg();
         default -> MemberSpecification.orderByCreatedAt();
       });
     } else {
-      orderedSpec = spec.and(MemberSpecification.orderByCreatedAt());
+      spec = spec.and(MemberSpecification.orderByCreatedAt());
     }
-
-    Pageable pageable = PageRequest.of(page, 6);
-    Page<Member> pagedMember = memberRepository.findAll(orderedSpec, pageable);
-
-    List<Member> members = pagedMember.getContent();
-    int nextPage = pagedMember.hasNext() ? page + 1 : 0;
-    MemberPageDTO response = new MemberPageDTO(nextPage, members);
-    return new ResponseDTO<>(response, HttpStatus.OK);
+    return spec;
   }
 }

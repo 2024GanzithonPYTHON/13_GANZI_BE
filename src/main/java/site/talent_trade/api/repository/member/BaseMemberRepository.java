@@ -18,5 +18,5 @@ public interface BaseMemberRepository {
 
   Member findMemberWithProfileById(Long memberId);
 
-  List<Member> findRandomMemberByTalent(Talent talent);
+  List<Member> findRandomMemberByTalent(Long memberId, Talent talent);
 }

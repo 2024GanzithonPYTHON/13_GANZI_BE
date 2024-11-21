@@ -12,9 +12,10 @@ public interface MainPageService {
   ResponseDTO<MemberListDTO> recommendMembers(Long memberId);
 
   /*메인 페이지의 유저 목록 조회*/
-  ResponseDTO<MemberPageDTO> getMainPageMembers(int page, Talent talent, SortBy sortBy);
+  ResponseDTO<MemberPageDTO> getMainPageMembers(Long memberId, int page, Talent talent,
+      SortBy sortBy);
 
   /*검색어로 회원 검색*/
-  ResponseDTO<MemberPageDTO> searchMembers(int page, SortBy sortBy, String query);
+  ResponseDTO<MemberPageDTO> searchMembers(Long memberId, int page, SortBy sortBy, String query);
 
 }
