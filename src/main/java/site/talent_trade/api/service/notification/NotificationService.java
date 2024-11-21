@@ -9,7 +9,7 @@ public interface NotificationService {
   public ResponseDTO<NotificationListDTO> getMyNotificationList(Long memberId);
 
   /*알림 읽음 처리*/
-  public ResponseDTO<Void> checkNotification(Long notificationId);
+  public ResponseDTO<Void> checkNotification(Long memberId, Long notificationId);
 
   /*알림 모두 읽음 처리*/
   public ResponseDTO<Void> checkAllNotification(Long memberId);

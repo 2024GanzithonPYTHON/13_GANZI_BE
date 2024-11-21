@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import site.talent_trade.api.domain.notification.Notification;
 import site.talent_trade.api.dto.notification.response.NotificationListDTO;
 import site.talent_trade.api.repository.notification.NotificationRepository;
+import site.talent_trade.api.util.exception.CustomException;
+import site.talent_trade.api.util.exception.ExceptionStatus;
 import site.talent_trade.api.util.response.ResponseDTO;
 
 @Service
@@ -26,8 +28,13 @@ public class NotificationServiceImpl implements NotificationService {
 
   @Override
   @Transactional
-  public ResponseDTO<Void> checkNotification(Long notificationId) {
+  public ResponseDTO<Void> checkNotification(Long memberId, Long notificationId) {
     Notification notification = notificationRepository.findByNotificationId(notificationId);
+
+    // 본인 알림이 아닌 경우 예외 발생
+    if (!notification.getFromMember().getId().equals(memberId)) {
+      throw  new CustomException(ExceptionStatus.FORBIDDEN);
+    }
     notification.checkNotification();
     return new ResponseDTO<>(null, HttpStatus.OK);
   }

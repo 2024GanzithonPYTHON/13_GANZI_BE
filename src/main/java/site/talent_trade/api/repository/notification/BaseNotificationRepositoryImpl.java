@@ -21,6 +21,7 @@ public class BaseNotificationRepositoryImpl implements BaseNotificationRepositor
   public Notification findByNotificationId(Long notificationId) {
     try {
       return em.createQuery("select n from Notification n"
+              + " left join fetch n.toMember tm"
               + " where n.id = :notificationId", Notification.class)
           .setParameter("notificationId", notificationId)
           .getSingleResult();
