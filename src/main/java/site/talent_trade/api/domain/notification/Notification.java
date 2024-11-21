@@ -99,7 +99,6 @@ public class Notification {
   /*메시지 알림인 경우 데이터 최신화*/
   public void updateMessageNotification(Message message) {
     this.content = truncateContent(message.getContent());
-    this.contentId = message.getChatRoomId();
     this.timestamp = new Timestamp();
     this.checked = false;
   }

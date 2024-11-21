@@ -52,16 +52,17 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessageRepository.save(message);
 
         // 해당 채팅방의 마지막 메시지와 시간을 업데이트
-        Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(message.getChatRoomId());
-        chatRoomOptional.ifPresent(chatRoom -> {
-            chatRoom.updateLastMessage(message.getContent(), message.getCreatedAt());
-            // save는 @Transactional이 처리하므로 불필요
+        Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(message.getChatRoom().getId());
+        ChatRoom chatRoom = chatRoomOptional.orElseThrow(()
+            -> new CustomException(ExceptionStatus.CHAT_ROOM_NOT_FOUND));
+        chatRoomOptional.ifPresent(cr -> {
+            cr.updateLastMessage(message.getContent(), message.getCreatedAt());
         });
 
         // 알림 최신화 혹은 생성
         Optional<Notification> notificationOptional =
             notificationRepository.findByFromMemberIdAndChatRoomId(
-                message.getFromMember().getId(), message.getChatRoomId()
+                message.getFromMember().getId(), message.getChatRoom().getId()
             );
 
         if (notificationOptional.isPresent()) {
@@ -73,7 +74,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .toMember(message.getToMember())
                 .type(NotificationType.MESSAGE)
                 .content(message.getContent())
-                .contentId(message.getChatRoomId())
+                .contentId(chatRoom.getId())
                 .build();
             notificationRepository.save(notification);
         }
@@ -116,8 +117,12 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         LocalDateTime createdAt = messagePayload.getCreatedAt() != null ? messagePayload.getCreatedAt() : LocalDateTime.now();
 
+        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(messagePayload.getChatRoomId());
+        ChatRoom chatRoom = optionalChatRoom.orElseThrow(() -> new CustomException(ExceptionStatus.CHAT_ROOM_NOT_FOUND));
+
+
         Message newMessage = Message.builder()
-                .chatRoomId(messagePayload.getChatRoomId())
+                .chatRoom(chatRoom)
                 .fromMember(fromMember)
                 .toMember(toMember)
                 .content(messagePayload.getContent())
