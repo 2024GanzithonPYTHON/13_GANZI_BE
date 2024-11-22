@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/post")
+@RequestMapping("/post")
 @Slf4j
 public class PostController {
 
@@ -29,7 +29,7 @@ public class PostController {
 
 
     // 게시글 리스트 조회 (jwt 인증 필요 없음)
-    @GetMapping("/getPosts")
+    @GetMapping("/get")
     public ResponseDTO<List<PostResponseDTO>> getPostList(@RequestParam(value = "talent", required = false) String talent,
                                                           @RequestParam(value = "keyword", required = false) String keyword,
                                                           @RequestParam(value = "sortBy", defaultValue = "LATEST") SortBy sortBy) {
@@ -40,7 +40,7 @@ public class PostController {
     }
 
     // 게시글 작성(jwt 인증 필요)
-    @PostMapping
+    @PostMapping("/create")
     public ResponseDTO<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO, HttpServletRequest request) {
         // JWT 토큰을 통해 사용자 인증
         Long memberId = jwtProvider.validateToken(request);
@@ -55,9 +55,9 @@ public class PostController {
     @GetMapping("/detail/{postId}")
     public ResponseDTO<PostDetailDTO> getPostDetail(HttpServletRequest request, @PathVariable Long postId) {
 
-        jwtProvider.validateToken(request);
+        Long memberId = jwtProvider.validateToken(request);
 
-        return postService.getPostDetail(postId);
+        return postService.getPostDetail(postId,memberId);
     }
 
     //마이페이지 -> 내가 쓴 게시물 가져오기(댓글 개수, 제목, 날짜)

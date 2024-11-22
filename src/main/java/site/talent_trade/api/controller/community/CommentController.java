@@ -15,7 +15,7 @@ import site.talent_trade.api.util.response.ResponseDTO;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comments")
+@RequestMapping("/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -23,8 +23,8 @@ public class CommentController {
     private final JwtProvider jwtProvider;
 
     //댓글 작성
-    @PostMapping
-    public ResponseDTO<CommentResponseDTO> createPost(@RequestBody CommentRequestDTO commentRequestDTO, HttpServletRequest request) {
+    @PostMapping("/create")
+    public ResponseDTO<CommentResponseDTO> createComment(@RequestBody CommentRequestDTO commentRequestDTO, HttpServletRequest request) {
         // JWT 토큰을 통해 사용자 인증
         Long memberId = jwtProvider.validateToken(request);
 

@@ -3,6 +3,7 @@ package site.talent_trade.api.domain.community;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import site.talent_trade.api.domain.Timestamp;
 import site.talent_trade.api.domain.member.Member;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 @AllArgsConstructor  //Builder 객체에 구성할 모든 필드를 포함하는 생성자 생성
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id

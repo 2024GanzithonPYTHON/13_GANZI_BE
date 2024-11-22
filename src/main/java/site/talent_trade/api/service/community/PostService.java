@@ -25,7 +25,7 @@ public interface PostService {
     ResponseDTO<List<PostResponseDTO>> getPostList(String talent,String keyword, SortBy sortBy);
 
     //글 조회 -> 조회할 때 hitCount + 1 해줘야 함
-    ResponseDTO<PostDetailDTO> getPostDetail(Long postId);
+    ResponseDTO<PostDetailDTO> getPostDetail(Long postId,Long memberId);
 
     //내가 작성한 글 조회
     ResponseDTO<List<PostResponseDTO>> findByMemberId(Long memberId);

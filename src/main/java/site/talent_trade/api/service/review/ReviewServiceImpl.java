@@ -7,12 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.talent_trade.api.domain.chat.ChatRoom;
 import site.talent_trade.api.domain.member.Member;
+import site.talent_trade.api.domain.notification.Notification;
+import site.talent_trade.api.domain.notification.NotificationType;
 import site.talent_trade.api.domain.review.Review;
 import site.talent_trade.api.dto.review.request.ReviewRequestDTO;
 import site.talent_trade.api.dto.review.response.ReviewListDTO;
 import site.talent_trade.api.dto.review.response.ReviewResponseDTO;
 import site.talent_trade.api.repository.chat.ChatRoomRepository;
 import site.talent_trade.api.repository.member.MemberRepository;
+import site.talent_trade.api.repository.notification.NotificationRepository;
 import site.talent_trade.api.repository.review.ReviewRepository;
 import site.talent_trade.api.util.exception.CustomException;
 import site.talent_trade.api.util.exception.ExceptionStatus;
@@ -26,6 +29,7 @@ public class ReviewServiceImpl implements ReviewService {
   private final ReviewRepository reviewRepository;
   private final MemberRepository memberRepository;
   private final ChatRoomRepository chatRoomRepository;
+  private final NotificationRepository notificationRepository;
 
   @Override
   @Transactional
@@ -52,6 +56,15 @@ public class ReviewServiceImpl implements ReviewService {
         .score(request.getScore())
         .build();
     reviewRepository.save(review);
+
+    Notification notification = Notification.builder()
+        .fromMember(fromMember)
+        .toMember(toMember)
+        .type(NotificationType.REVIEW)
+        .content(review.getContent())
+        .contentId(review.getId())
+        .build();
+    notificationRepository.save(notification);
 
     ReviewResponseDTO response = new ReviewResponseDTO(review);
     return new ResponseDTO<>(response, HttpStatus.CREATED);

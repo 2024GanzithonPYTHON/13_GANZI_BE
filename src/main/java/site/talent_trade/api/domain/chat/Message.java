@@ -3,6 +3,7 @@ package site.talent_trade.api.domain.chat;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import site.talent_trade.api.domain.member.Member;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor  //Builder 객체에 구성할 모든 필드를 포함하는 생성자 생성
+@EntityListeners(AuditingEntityListener.class)
 public class Message {
 
     @Id
