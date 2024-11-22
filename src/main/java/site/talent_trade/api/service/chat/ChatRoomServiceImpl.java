@@ -64,6 +64,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // DTO로 변환 후 반환
         ChatRoomResponseDTO chatRoomResponseDTO = ChatRoomResponseDTO.builder()
                 .roomId(chatRoom.getId())
+                .fromMemberId(fromMemberId)
+                .toMemberId(toMemberId)
                 .opponentNickname(toMember.getNickname())
                 .talent(toMember.getMyTalent())
                 .detailTalent(toMember.getMyTalentDetail())
@@ -85,6 +87,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
                     return ChatRoomResponseDTO.builder()
                             .roomId(chatRoom.getId())
+                            .fromMemberId(memberId)
+                            .toMemberId(opponent.getId())
                             .opponentNickname(opponent.getNickname())   // 상대방의 닉네임
                             .talent(opponent.getMyTalent())               // 상대방의 재능
                             .detailTalent(opponent.getMyTalentDetail())   // 상대방의 세부 재능
@@ -119,6 +123,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // DTO로 변환 후 반환
         ChatRoomResponseDTO chatRoomResponseDTO = ChatRoomResponseDTO.builder()
                 .roomId(chatRoom.getId())
+                .fromMemberId(chatRoom.getFromMember().getId())
+                .toMemberId(chatRoom.getToMember().getId())
                 .opponentNickname(chatRoom.getFromMember().getNickname())  // 예시로 'fromMember' 사용
                 .talent(chatRoom.getFromMember().getMyTalent())
                 .detailTalent(chatRoom.getFromMember().getMyTalentDetail())
