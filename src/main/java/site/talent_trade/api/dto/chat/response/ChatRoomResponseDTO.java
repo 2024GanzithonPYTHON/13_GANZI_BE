@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 public class ChatRoomResponseDTO {
 
     private Long roomId;
+    private Long fromMemberId; //보낸 사람의 아이디
+    private Long toMemberId; //보낸 사람의 아이디
     private String opponentNickname; //상대방 닉네임
     private Talent talent; //재능
     private String detailTalent; //세부재능
@@ -18,8 +20,10 @@ public class ChatRoomResponseDTO {
     private LocalDateTime lastMessageAt; //마지막 메시지를 받은 시간
     private boolean completed; //성사됐는지 안됐는지
 
-    public ChatRoomResponseDTO(Long roomId, String opponentNickname, Talent talent, String detailTalent, String lastMessage, LocalDateTime lastMessageAt, boolean completed) {
+    public ChatRoomResponseDTO(Long roomId,Long fromMemberId,Long toMemberId, String opponentNickname, Talent talent, String detailTalent, String lastMessage, LocalDateTime lastMessageAt, boolean completed) {
         this.roomId = roomId;
+        this.fromMemberId= fromMemberId;
+        this.toMemberId = toMemberId;
         this.opponentNickname = opponentNickname;
         this.talent = talent;
         this.detailTalent = detailTalent;
