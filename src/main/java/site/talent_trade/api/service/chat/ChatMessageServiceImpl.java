@@ -122,7 +122,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 
         Message newMessage = Message.builder()
-                .chatRoom(chatRoom)
+                .chatRoomId(messagePayload.getChatRoomId())
                 .fromMember(fromMember)
                 .toMember(toMember)
                 .content(messagePayload.getContent())
