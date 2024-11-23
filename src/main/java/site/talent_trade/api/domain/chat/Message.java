@@ -22,11 +22,8 @@ public class Message {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "chatroom_id", insertable = false, updatable = false)
+    @JoinColumn(name = "chatroom_id", updatable = false)
     private ChatRoom chatRoom;
-
-    @Column(name = "chatroom_id")
-    private Long chatRoomId;
 
     @ManyToOne
     @JoinColumn(name = "from_member_id")
