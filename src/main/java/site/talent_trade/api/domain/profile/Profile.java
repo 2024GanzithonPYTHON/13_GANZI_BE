@@ -114,4 +114,9 @@ public class Profile {
     this.scoreAvg = BigDecimal.valueOf(this.scoreAccum)
         .divide(BigDecimal.valueOf(this.reviewCnt), 1, RoundingMode.HALF_UP);
   }
+
+  /*재능 교환 성사 횟수 증가*/
+  public void increaseTradeCnt() {
+    this.tradeCnt++;
+  }
 }

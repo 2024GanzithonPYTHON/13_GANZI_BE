@@ -175,6 +175,4 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 member.getId(),
                 member.getNickname());
     }
-
-
 }
