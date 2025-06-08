@@ -49,12 +49,15 @@
 - **Image Processing**: Thumbnailator  
 - **Etc**: Lombok, Validation, DevTools
 
-# 6. Team Members (팀원 및 팀 소개)
-|                                                        신정섭                                                        |                                                        허민영                                                        |
-|:-----------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/user-attachments/assets/1492cee2-14f9-4bb3-ba58-3a5b12bd4b49" alt="신정섭" width="150"> | <img src="https://github.com/user-attachments/assets/0e9b3777-647c-47eb-b3ab-43dc640da99d" alt="허민영" width="150" height="150"> |
-|                                                        BE                                                         |                                                        BE                                                         |
-|                                      [GitHub](https://github.com/ShinSub98)                                      |                                       [GitHub](https://github.com/MinCodeHub)  
+# 🗂 팀원 및 팀 소개
+
+멋쟁이 사자처럼 12기에서 개최된 해커톤 "간지톤"에서 만난 TEAM 코드브루 입니다.
+
+| 이선민 | 김시은 | 남지연 | 신정섭 | 허민영 |
+|:------:|:------:|:------:|:------:|:------:|
+| <img src="https://github.com/user-attachments/assets/a13c0ba0-4902-4607-b9a6-ab8953fa54ad" alt="이선민" width="150"/> | <img src="https://github.com/user-attachments/assets/a13c0ba0-4902-4607-b9a6-ab8953fa54ad" alt="김시은" width="150"/> | <img src="https://github.com/user-attachments/assets/a13c0ba0-4902-4607-b9a6-ab8953fa54ad" alt="남지연" width="150"/> | <img src="https://github.com/user-attachments/assets/1492cee2-14f9-4bb3-ba58-3a5b12bd4b49" alt="신정섭" width="150"/> | <img src="https://github.com/user-attachments/assets/0e9b3777-647c-47eb-b3ab-43dc640da99d" alt="허민영" width="150" height="150"/> |
+| 기획 | FE | FE | BE | BE |
+| 없음 | [GitHub](https://github.com/sieun2im) | [GitHub](https://github.com/jiyeoneeeeeeee) | [GitHub](https://github.com/ShinSub98) | [GitHub](https://github.com/MinCodeHub) |
 
 <br/>
 <br/>
